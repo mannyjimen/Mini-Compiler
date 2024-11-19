@@ -20,7 +20,9 @@
 
 /*maybe instead of having a single vector with a token that represents a new line
 , a vector of vectors could be better, where each vector represents a new line
-, could make code easier to read*/
+, could make code easier to read
+number of vectors = number of lines in source code
+*/
 
 #include <vector>
 #include <iostream>
@@ -42,7 +44,7 @@ enum TokenClass{
 
 class Token{
     public:
-
+    
 
     private:
     char m_token;
@@ -53,6 +55,7 @@ class Lexer{
     public:
 
     private:
+
     
 };
 
