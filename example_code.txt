@@ -1,0 +1,13 @@
+code:
+X = 5
+Y = 'HELLO'
+Write(X)
+Write(Y)
+Z = X + 10
+Write(Z)
+END:
+
+output:
+5
+HELLO
+15
