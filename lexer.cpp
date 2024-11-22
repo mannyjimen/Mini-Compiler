@@ -29,6 +29,13 @@ std::vector<std::vector<Token>> Lexer::getAllTokens(){
 }
 
 void Lexer::printTokens(){
-
+    std::vector<Token> currentLineTokens;
+    for (auto currLineIt : linesOfTokens){
+        currentLineTokens = currLineIt;
+        for (auto currTokIt : currentLineTokens){
+            std::cout << currTokIt.m_token;
+        }
+        std::cout << "\n";
+    }
 }
 
