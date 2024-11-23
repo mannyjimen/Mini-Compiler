@@ -28,14 +28,52 @@ std::vector<std::vector<Token>> Lexer::getAllTokens(){
     return linesOfTokens;
 }
 
+//added operator overload << for Token objects, helper to printTokens
+std::ostream& operator<<(std::ostream& output, Token& rhs){
+    output << "Char: " << rhs.m_token << " | Tokenclass: ";
+    switch(rhs.m_class){
+        case(0):
+            output << "Number";
+            break;
+        case(1):
+            output << "Letter";
+            break; 
+        case(2):
+            output << "OpenPara";
+            break; 
+        case(3):
+            output << "ClosePara";
+            break; 
+        case(4):
+            output << "Operation";
+            break; 
+        case(5):
+            output << "Equal";
+            break; 
+        case(6):
+            output << "Quote";
+            break;
+        case(7):
+            output << "Colon";
+            break;
+        case(8):
+            output << "Invalid";
+            break;  
+    } 
+    return output;
+}
+
+//print Tokens specifying Char and TokenClass
 void Lexer::printTokens(){
     std::vector<Token> currentLineTokens;
+    int currLine = 0;
     for (auto currLineIt : linesOfTokens){
+        currLine++;
+        std::cout << "Line " << currLine << " ~\n";
         currentLineTokens = currLineIt;
         for (auto currTokIt : currentLineTokens){
-            std::cout << currTokIt.m_token;
+            std::cout << currTokIt << "\n";
         }
-        std::cout << "\n";
     }
 }
 
