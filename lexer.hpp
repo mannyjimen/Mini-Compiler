@@ -28,6 +28,8 @@ Ready to begin parsing (I think lol)
 #include <iostream>
 #include <string>
 
+
+//token classes (will probably add or delete some classes)
 enum TokenClass{
     Number,
     Letter,
@@ -43,6 +45,7 @@ enum TokenClass{
 struct Token{
     char m_token;
     TokenClass m_class;
+    //constructs token for given character
     Token(const char& x){
         m_token = x;
         if (x >= 48 && x <= 57)
@@ -77,11 +80,15 @@ struct Token{
 
 class Lexer{
     public:
-    Lexer(const std::string& src_file); //constructing Lexer with src file (text file with code)
-
+     //constructing Lexer with src file (text file with code)
+    Lexer(const std::string& src_file);
+    //helper function to create token for the given char parameter
     Token createToken(const char& x);
-    std::vector<Token> getTokensForLine(const std::string& line); //return vector of tokens to be pushed to vector
+    //return vector of tokens for specific line input
+    std::vector<Token> getTokensForLine(const std::string& line);
+    //returns linesOfTokens (vector of vectors of tokens)
     std::vector<std::vector<Token>> getAllTokens();
+    //prints tokens in an organized manner (specifying character and token type)
     void printTokens();
 
     private:

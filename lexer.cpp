@@ -10,7 +10,7 @@ Lexer::Lexer(const std::string& src_file){
     }
 }
 
-Token Lexer::createToken(const char& x){ //token creation helper function
+Token Lexer::createToken(const char& x){
     Token newTok(x);
     return newTok;
 }
@@ -28,7 +28,7 @@ std::vector<std::vector<Token>> Lexer::getAllTokens(){
     return linesOfTokens;
 }
 
-//added operator overload << for Token objects, helper to printTokens
+//operator overload << for Token objects, helper to printTokens
 std::ostream& operator<<(std::ostream& output, Token& rhs){
     output << "Char: " << rhs.m_token << " | Tokenclass: ";
     switch(rhs.m_class){
@@ -63,7 +63,6 @@ std::ostream& operator<<(std::ostream& output, Token& rhs){
     return output;
 }
 
-//print Tokens specifying Char and TokenClass
 void Lexer::printTokens(){
     std::vector<Token> currentLineTokens;
     int currLine = 0;
