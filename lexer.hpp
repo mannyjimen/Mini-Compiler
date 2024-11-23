@@ -62,7 +62,7 @@ struct Token{
                 case ')':
                     m_class = ClosePara;
                     break;
-                case 44:
+                case '"':
                     m_class = Quote;
                     break;
                 case ':':
