@@ -2,8 +2,8 @@
 #define LEXER_
 
 //GOAL
-//compile input source code to machine code that
-//parser will understand. A single Vector of Tokens. 
+//compile input source code file to a vector of tokens.
+//for every line in the source code file, that is a separate vector. 
 
 //example:
 //Source code//
@@ -18,10 +18,10 @@
 
 //thoughts
 
-/*maybe instead of having a single vector with a token that represents a new line
-, a vector of vectors could be better, where each vector represents a new line
-, could make code easier to read
+/*
 number of vectors = number of lines in source code
+Successfully adds all tokens to vectors, and vectors to lexer data member. 
+Ready to begin parsing (I think lol)
 */
 
 #include <vector>
