@@ -10,8 +10,39 @@ Lexer::Lexer(const std::string& src_file){
     }
 }
 
+TokenClass Lexer::decideClass(const char& TokChar){
+    if (TokChar >= 48 && TokChar <= 57)
+        return TokenClass::Number;
+    else if ((TokChar >= 65 && TokChar <= 90) || (TokChar >= 97 && TokChar <= 122))
+        return TokenClass::Letter;
+    else if (TokChar == '+' || TokChar == '-' || TokChar == '*' || TokChar == '/')
+        return TokenClass::Operation;
+    else{
+        switch(TokChar){
+            case '=':
+                return TokenClass::Equal;
+                break;
+            case '(':
+                return TokenClass::OpenPara;
+                break;
+            case ')':
+                return TokenClass::ClosePara;
+                break;
+            case '"':
+                return TokenClass::Quote;
+                break;
+            case ':':
+                return TokenClass::Colon;
+                break;
+            default: 
+                return TokenClass::Invalid;
+        }
+    }
+}
+
+
 Token Lexer::createToken(const char& x){
-    Token newTok(x);
+    Token newTok(x, decideClass(x));
     return newTok;
 }
 
@@ -30,33 +61,33 @@ std::vector<std::vector<Token>> Lexer::getAllTokens(){
 
 //operator overload << for Token objects, helper to printTokens
 std::ostream& operator<<(std::ostream& output, Token& rhs){
-    output << "Char: " << rhs.m_token << " | Tokenclass: ";
+    output << "Char: " << rhs.m_char << " | Tokenclass: ";
     switch(rhs.m_class){
-        case(0):
+        case(TokenClass::Number):
             output << "Number";
             break;
-        case(1):
+        case(TokenClass::Letter):
             output << "Letter";
             break; 
-        case(2):
+        case(TokenClass::OpenPara):
             output << "OpenPara";
             break; 
-        case(3):
+        case(TokenClass::ClosePara):
             output << "ClosePara";
             break; 
-        case(4):
+        case(TokenClass::Operation):
             output << "Operation";
             break; 
-        case(5):
+        case(TokenClass::Equal):
             output << "Equal";
             break; 
-        case(6):
+        case(TokenClass::Quote):
             output << "Quote";
             break;
-        case(7):
+        case(TokenClass::Colon):
             output << "Colon";
             break;
-        case(8):
+        case(TokenClass::Invalid):
             output << "Invalid";
             break;  
     } 

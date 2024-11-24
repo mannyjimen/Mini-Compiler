@@ -3,7 +3,11 @@
 
 //GOAL
 //compile input source code file to a vector of tokens.
-//for every line in the source code file, that is a separate vector. 
+//for every line in the source code file, that is a separate vector.
+
+//subgoal - use enum class instead of plain enums DONE
+//- take input string instead of source file (can then create anotherfunction to take a string of a file)
+//- make the lexer determine what type of token it is, not the token constructor DONE
 
 //example:
 //Source code//
@@ -17,7 +21,6 @@
 //Tok05 has TokenClass Number, char'5'
 
 //thoughts
-
 /*
 number of vectors = number of lines in source code
 Successfully adds all tokens to vectors, and vectors to lexer data member. 
@@ -30,7 +33,7 @@ Ready to begin parsing (I think lol)
 
 
 //token classes (will probably add or delete some classes)
-enum TokenClass{
+enum class TokenClass{
     Number,
     Letter,
     OpenPara,
@@ -43,38 +46,12 @@ enum TokenClass{
 };
 
 struct Token{
-    char m_token;
+    char m_char;
     TokenClass m_class;
     //constructs token for given character
-    Token(const char& x){
-        m_token = x;
-        if (x >= 48 && x <= 57)
-            m_class = Number;
-        else if ((x >= 65 && x <= 90) || (x >= 97 && x <= 122))
-            m_class = Letter;
-        else if (x == '+' || x == '-' || x == '*' || x == '/')
-            m_class = Operation;
-        else{
-            switch(x){
-                case '=':
-                    m_class = Equal;
-                    break;
-                case '(':
-                    m_class = OpenPara;
-                    break;
-                case ')':
-                    m_class = ClosePara;
-                    break;
-                case '"':
-                    m_class = Quote;
-                    break;
-                case ':':
-                    m_class = Colon;
-                    break;
-                default: 
-                    m_class = Invalid;
-            }
-        }
+    Token(const char& TokChar, const TokenClass TokClass){
+        m_char = TokChar;
+        m_class = TokClass;
     }
 };
 
@@ -82,6 +59,8 @@ class Lexer{
     public:
      //constructing Lexer with src file (text file with code)
     Lexer(const std::string& src_file);
+    //returns TokenClass of input char
+    TokenClass decideClass(const char& TokChar);
     //helper function to create token for the given char parameter
     Token createToken(const char& x);
     //return vector of tokens for specific line input
