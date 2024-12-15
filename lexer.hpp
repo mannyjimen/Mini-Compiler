@@ -9,6 +9,7 @@
 //- take input string instead of source file (can then create anotherfunction to take a string of a file)
 //- make the lexer determine what type of token it is, not the token constructor DONE
 
+
 //example:
 //Source code//
 //Y = 5
@@ -43,22 +44,21 @@ enum class TokenClass{
     Quote,
     Colon,
     Invalid,
+    EndOfLine,
 };
 
 struct Token{
     char m_char;
     TokenClass m_class;
     //constructs token for given character
-    Token(const char& TokChar, const TokenClass TokClass){
-        m_char = TokChar;
-        m_class = TokClass;
-    }
+    Token(const char& TokChar, const TokenClass TokClass): 
+    m_char{TokChar}, m_class{TokClass} {}
 };
 
 class Lexer{
     public:
      //constructing Lexer with src file (text file with code)
-    Lexer(const std::string& src_file);
+    Lexer(const std::string& entireProgram);
     //returns TokenClass of input char
     TokenClass decideClass(const char& TokChar);
     //helper function to create token for the given char parameter

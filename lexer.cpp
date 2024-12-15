@@ -1,13 +1,18 @@
 #include "lexer.hpp"
 #include <fstream>
 
-Lexer::Lexer(const std::string& src_file){
+Lexer::Lexer(const std::string& entireProgram){
     std::ifstream srcFile("example_code.txt"); //creates srcFile ifstream 
     std::string currentLine;
     while (getline(srcFile, currentLine)){ //reads lines of srcFile one by one
         //gets vector of tokens for each line, pushes to back of linesOfTokens
         linesOfTokens.push_back(getTokensForLine(currentLine)); 
     }
+}
+
+//if we want to input from a txt.file
+static void fromFile(const std::string& srcFile){
+    std::ifstream source(srcFile);
 }
 
 TokenClass Lexer::decideClass(const char& TokChar){
@@ -34,6 +39,8 @@ TokenClass Lexer::decideClass(const char& TokChar){
             case ':':
                 return TokenClass::Colon;
                 break;
+            case ';':
+                return TokenClass::EndOfLine;
             default: 
                 return TokenClass::Invalid;
         }
@@ -49,7 +56,10 @@ Token Lexer::createToken(const char& x){
 std::vector<Token> Lexer::getTokensForLine(const std::string& line){
     std::vector<Token> finalVec;
     for (int currentIndex = 0; currentIndex < line.size(); currentIndex++){
-        if (line[currentIndex] != ' ') //if current char is not a space
+        Token newToken = createToken(line[currentIndex]);
+        if (newToken.m_class == TokenClass::EndOfLine)
+            return finalVec;
+        else if (line[currentIndex] != ' ') //if current char is not a space
             finalVec.push_back(createToken(line[currentIndex]));
     }
     return finalVec;
