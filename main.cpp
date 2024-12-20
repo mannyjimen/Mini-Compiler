@@ -2,6 +2,6 @@
 
 int main()
 {
-    Lexer Hello("example_code.txt");
+    Lexer Hello("firstcode;2+2=4;lol;");
     Hello.printTokens();
 }

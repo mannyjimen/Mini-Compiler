@@ -1,18 +1,12 @@
 #include "lexer.hpp"
 #include <fstream>
 
-Lexer::Lexer(const std::string& entireProgram){
-    std::ifstream srcFile("example_code.txt"); //creates srcFile ifstream 
-    std::string currentLine;
-    while (getline(srcFile, currentLine)){ //reads lines of srcFile one by one
-        //gets vector of tokens for each line, pushes to back of linesOfTokens
-        linesOfTokens.push_back(getTokensForLine(currentLine)); 
-    }
-}
 
-//if we want to input from a txt.file
-static void fromFile(const std::string& srcFile){
-    std::ifstream source(srcFile);
+//writes entire string program into member vector
+Lexer::Lexer(const std::string& stringedProgram){
+    for (char c: stringedProgram){
+        entireTokenProgram.push_back(createToken(c));
+    }
 }
 
 TokenClass Lexer::decideClass(const char& TokChar){
@@ -47,26 +41,9 @@ TokenClass Lexer::decideClass(const char& TokChar){
     }
 }
 
-
 Token Lexer::createToken(const char& x){
     Token newTok(x, decideClass(x));
     return newTok;
-}
-
-std::vector<Token> Lexer::getTokensForLine(const std::string& line){
-    std::vector<Token> finalVec;
-    for (int currentIndex = 0; currentIndex < line.size(); currentIndex++){
-        Token newToken = createToken(line[currentIndex]);
-        if (newToken.m_class == TokenClass::EndOfLine)
-            return finalVec;
-        else if (line[currentIndex] != ' ') //if current char is not a space
-            finalVec.push_back(createToken(line[currentIndex]));
-    }
-    return finalVec;
-}
-
-std::vector<std::vector<Token>> Lexer::getAllTokens(){
-    return linesOfTokens;
 }
 
 //operator overload << for Token objects, helper to printTokens
@@ -100,20 +77,18 @@ std::ostream& operator<<(std::ostream& output, Token& rhs){
         case(TokenClass::Invalid):
             output << "Invalid";
             break;  
+        case(TokenClass::EndOfLine):
+            output << "EndOfLine";
+            break;
     } 
     return output;
 }
 
 void Lexer::printTokens(){
-    std::vector<Token> currentLineTokens;
-    int currLine = 0;
-    for (auto currLineIt : linesOfTokens){
-        currLine++;
-        std::cout << "Line " << currLine << " ~\n";
-        currentLineTokens = currLineIt;
-        for (auto currTokIt : currentLineTokens){
-            std::cout << currTokIt << "\n";
-        }
-    }
+    for (Token currentToken: entireTokenProgram)
+        std::cout << currentToken << '\n';
 }
 
+std::vector<Token> Lexer::getAllTokens(){
+    return entireTokenProgram; 
+}
