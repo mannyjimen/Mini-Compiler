@@ -3,52 +3,54 @@
 
 
 //writes entire string program into member vector
-Lexer::Lexer(const std::string& stringedProgram){
-    for (char c: stringedProgram){
-        entireTokenProgram.push_back(createToken(c));
-    }
+Lexer::Lexer(const std::string& source_text){
+    
 }
 
-TokenClass Lexer::decideClass(const char& TokChar){
-    if (TokChar >= 48 && TokChar <= 57)
-        return TokenClass::Number;
-    else if ((TokChar >= 65 && TokChar <= 90) || (TokChar >= 97 && TokChar <= 122))
-        return TokenClass::Letter;
-    else if (TokChar == '+' || TokChar == '-' || TokChar == '*' || TokChar == '/')
-        return TokenClass::Operation;
-    else{
-        switch(TokChar){
-            case '=':
-                return TokenClass::Equal;
-                break;
-            case '(':
-                return TokenClass::OpenPara;
-                break;
-            case ')':
-                return TokenClass::ClosePara;
-                break;
-            case '"':
-                return TokenClass::Quote;
-                break;
-            case ':':
-                return TokenClass::Colon;
-                break;
-            case ';':
-                return TokenClass::EndOfLine;
-            default: 
-                return TokenClass::Invalid;
-        }
-    }
+TokenClass Lexer::decideClass(const std::string token_string){
+    // if (TokChar >= 48 && TokChar <= 57)
+    //     return TokenClass::Number;
+    // else if ((TokChar >= 65 && TokChar <= 90) || (TokChar >= 97 && TokChar <= 122))
+    //     return TokenClass::Letter;
+    // else if (TokChar == '+' || TokChar == '-' || TokChar == '*' || TokChar == '/')
+    //     return TokenClass::Operation;
+    // else{
+    //     switch(TokChar){
+    //         case '=':
+    //             return TokenClass::Equal;
+    //             break;
+    //         case '(':
+    //             return TokenClass::OpenPara;
+    //             break;
+    //         case ')':
+    //             return TokenClass::ClosePara;
+    //             break;
+    //         case '"':
+    //             return TokenClass::Quote;
+    //             break;
+    //         case ':':
+    //             return TokenClass::Colon;
+    //             break;
+    //         case ';':
+    //             return TokenClass::EndOfLine;
+    //             break;
+    //         case ' ':
+    //             return TokenClass::Space;
+    //         default: 
+    //             return TokenClass::Invalid;
+    //     }
+    // }
+    return TokenClass::Invalid;
 }
 
-Token Lexer::createToken(const char& x){
+Token Lexer::createToken(const std::string x){
     Token newTok(x, decideClass(x));
     return newTok;
 }
 
 //operator overload << for Token objects, helper to printTokens
 std::ostream& operator<<(std::ostream& output, Token& rhs){
-    output << "Char: " << rhs.m_char << " | Tokenclass: ";
+    output << "Char: " << rhs.m_name << " | Tokenclass: ";
     switch(rhs.m_class){
         case(TokenClass::Number):
             output << "Number";
@@ -80,15 +82,18 @@ std::ostream& operator<<(std::ostream& output, Token& rhs){
         case(TokenClass::EndOfLine):
             output << "EndOfLine";
             break;
+        case(TokenClass::Space):
+            output << "Space";
+            break;
     } 
     return output;
 }
 
 void Lexer::printTokens(){
-    for (Token currentToken: entireTokenProgram)
-        std::cout << currentToken << '\n';
+    for (Token curr_token: m_tokenized_program)
+        std::cout << curr_token << '\n';
 }
 
-std::vector<Token> Lexer::getAllTokens(){
-    return entireTokenProgram; 
+std::vector<Token> Lexer::getAllTokens() const{
+    return this->m_tokenized_program; 
 }
