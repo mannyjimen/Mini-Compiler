@@ -13,15 +13,15 @@
 enum class TokenClass{
     Number,
     Letter,
-    OpenPara,
-    ClosePara,
-    Operation,
+    OpenParen,
+    CloseParen,
+    Operator,
     Equal,
     Quote,
     Colon,
     Space,
-    Invalid,
     EndOfLine,
+    Invalid,
 };
 
 struct Token{
@@ -43,9 +43,8 @@ class Lexer{
     //prints tokens in an organized manner (specifying character and token type)
     void printTokens();
 
-    
-    //getter function for parser. just returns entireTokenProgram
-    std::vector<Token> getAllTokens() const;
+    //getter function for parser. just returns tokenized program
+    std::vector<Token> getTokens() const;
 
     private:
     std::vector<Token> m_tokenized_program;  

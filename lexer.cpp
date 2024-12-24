@@ -58,14 +58,14 @@ std::ostream& operator<<(std::ostream& output, Token& rhs){
         case(TokenClass::Letter):
             output << "Letter";
             break; 
-        case(TokenClass::OpenPara):
-            output << "OpenPara";
+        case(TokenClass::OpenParen):
+            output << "OpenParen";
             break; 
-        case(TokenClass::ClosePara):
-            output << "ClosePara";
+        case(TokenClass::CloseParen):
+            output << "CloseParen";
             break; 
-        case(TokenClass::Operation):
-            output << "Operation";
+        case(TokenClass::Operator):
+            output << "Operator";
             break; 
         case(TokenClass::Equal):
             output << "Equal";
@@ -94,6 +94,6 @@ void Lexer::printTokens(){
         std::cout << curr_token << '\n';
 }
 
-std::vector<Token> Lexer::getAllTokens() const{
+std::vector<Token> Lexer::getTokens() const{
     return this->m_tokenized_program; 
 }
