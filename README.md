@@ -3,5 +3,5 @@ Fun programming language to get more experience with the process of lexing, pars
 To write a fully functional custom programming language and compiler for said language from scratch in C++.
 
 ### Parts
-- Lexer :heavy_check_mark:
+- Lexer :x:
 - Parser :x:
