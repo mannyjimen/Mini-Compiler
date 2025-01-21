@@ -1,3 +1,5 @@
-HELLO;
-x = 5; y = 1;
+first line;
+x + 5;
+y = 1;
 z + 4 = x - 5;
+END

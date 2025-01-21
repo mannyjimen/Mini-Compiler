@@ -2,6 +2,7 @@
 
 int main()
 {
-    Lexer Hello("firstcode;2+2=4;lol;");
+
+    Lexer Hello("HELLO");
     Hello.printTokens();
 }

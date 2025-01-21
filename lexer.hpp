@@ -27,7 +27,7 @@ enum class TokenClass{
 struct Token{
     std::string m_name;
     TokenClass m_class;
-    //constructs token for given character
+    
     Token(const std::string token_name, const TokenClass token_class): 
     m_name{token_name}, m_class{token_class} {}
 };
@@ -39,10 +39,8 @@ class Lexer{
     TokenClass decideClass(const std::string token_string);
     //helper function to create token for the given char parameter
     Token createToken(const std::string x);
-
     //prints tokens in an organized manner (specifying character and token type)
     void printTokens();
-
     //getter function for parser. just returns tokenized program
     std::vector<Token> getTokens() const;
 
