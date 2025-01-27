@@ -1,5 +1,17 @@
-first line;
-x + 5;
-y = 1;
-z + 4 = x - 5;
-END
+#first Lox porgram!
+print "Hello, world!";
+
+//Booleans
+true; //Not false.
+false; //Not *not* false.
+
+//only type of number, 
+1234; //integer
+12.34; //decimal number
+
+//strings
+"What's up doc.";
+""; //The empty string.
+"123"; //This is a string, not a number.
+
+//nil is C and Java's null, represents "no value"
