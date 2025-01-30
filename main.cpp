@@ -1,8 +1,9 @@
-#include "lexer.hpp"
+#include "Lox.hpp"
 
 int main()
 {
-
-    Lexer Hello("HELLO");
-    Hello.printTokens();
+    std::string decider;
+    std::cout << "Enter filename, or press ENTER for prompt: \n";
+    std::cin >> decider;
+    Lox program(decider);
 }
