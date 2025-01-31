@@ -6,10 +6,11 @@
 
 class Lox{
     public:
-    //running prompt
-    Lox();
     //running through file
-    Lox(std::string source_file);
+    Lox(int argc,char* argv[]);
+
+    void run_prompt();
+    void run_file(std::string source_file);
 
     private:
 };

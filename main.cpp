@@ -1,8 +1,6 @@
 #include "Lox.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::string decider;
-    std::cin >> decider;
-    Lox program(decider);
+    Lox firstProg(argc, argv);
 }
