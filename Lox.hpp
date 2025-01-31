@@ -7,6 +7,7 @@
 class Lox{
     public:
     Lox(int argc, char* argv[]);
+    bool hadError = false;
 
     private:
     
@@ -14,6 +15,9 @@ class Lox{
     void runFile(const std::string sourceFileName);
 
     void run(const std::string source);
+    
+    void error(int line, std::string message);
+    void report(int line, std::string where, std::string message);
 };
 
 #endif

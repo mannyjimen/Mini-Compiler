@@ -1,16 +1,15 @@
 #include "Lox.hpp"
 
 Lox::Lox(int argc, char* argv[]){
+    //learn about exceptions throw catch
+    if (argc > 2){
+        error(-1, "Too many arguments when executing");
+    }
     if (argc == 1){
-        std::cout << "Running from prompt:\n";
         runPrompt();
     }
-    else if (argc == 2){
-        std::cout << "Running from input file:\n";
+    else {
         runFile(argv[1]);
-    }
-    else{
-        std::cout << "Error\n";
     }
 }
 
@@ -22,6 +21,8 @@ void Lox::runPrompt(){
         if (line.empty())
             break;
         run(line);
+
+        hadError = true; //if error in code, don't want interactive to stop
     }
 }
 
@@ -41,5 +42,18 @@ void Lox::runFile(const std::string sourceFileName){
 }
 
 void Lox::run(const std::string source){
-    std::cout << source << std::endl;
+    //check if theres error in code
+
+    if (hadError){
+        return;
+    }
+}
+
+void Lox::error(int lineNum, std::string errorMessage){
+    report(lineNum, "", errorMessage);
+}
+
+void Lox::report(int lineNum, std::string where, std::string message){
+    std::cerr << "[line " << lineNum << "]" << " Error" << where << ": " << message;
+    hadError = true;
 }
