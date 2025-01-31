@@ -11,9 +11,9 @@ class Lox{
     private:
     
     void runPrompt();
-    void runFile(std::string sourceFileName);
+    void runFile(const std::string sourceFileName);
 
-    void run(std::string source);
+    void run(const std::string source);
 };
 
 #endif

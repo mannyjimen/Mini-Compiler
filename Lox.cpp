@@ -7,7 +7,7 @@ Lox::Lox(int argc, char* argv[]){
     }
     else if (argc == 2){
         std::cout << "Running from input file:\n";
-        runFile(argv[0]);
+        runFile(argv[1]);
     }
     else{
         std::cout << "Error\n";
@@ -25,7 +25,7 @@ void Lox::runPrompt(){
     }
 }
 
-void Lox::runFile(std::string sourceFileName){
+void Lox::runFile(const std::string sourceFileName){
     std::string entireProg = "";
     std::string temp;
     
@@ -35,12 +35,11 @@ void Lox::runFile(std::string sourceFileName){
         std::getline(sourceFile, temp);
         entireProg += temp;
     }
-
     sourceFile.close();
 
     run(entireProg);
 }
 
-void Lox::run(std::string source){
+void Lox::run(const std::string source){
     std::cout << source << std::endl;
 }
