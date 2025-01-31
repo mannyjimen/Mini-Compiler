@@ -1,10 +1,9 @@
 #include "Lox.hpp"
 
+Lox::Lox(){
+    std::cout << "Running from prompt\n";
+}
+
 Lox::Lox(std::string decider){
-    if (decider.empty()){
-        std::cout << "Running prompt\n";
-    }
-    else{
-        std::cout << "Reading from file\n";
-    }
+    std::cout << "Running from file\n";
 }

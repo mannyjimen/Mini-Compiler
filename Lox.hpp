@@ -6,7 +6,10 @@
 
 class Lox{
     public:
-    Lox(std::string decider);
+    //running prompt
+    Lox();
+    //running through file
+    Lox(std::string source_file);
 
     private:
 };
