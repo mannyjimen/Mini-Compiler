@@ -1,6 +1,7 @@
 #ifndef _TOKEN_
 #define _TOKEN_
 
+#include <iostream>
 #include <string>
 #include <variant>
 
@@ -25,17 +26,21 @@ enum class TokenType{
 
 class Token{
     public:
-    Token(TokenType type, std::string lexeme, std::variant<int, std::string> literal, int line){
-        this->type = type;
-        this->lexeme = lexeme;
-        this->literal = literal;
-        this->line = line;
+    Token(TokenType type, std::string lexeme, std::variant<bool, int, std::string> literal, int line){
+        this->m_type = type;
+        this->m_lexeme = lexeme;
+        this->m_literal = literal;
+        this->m_line = line;
+    }
+
+    std::string toString(){
+        return 
     }
     private:
-    TokenType type;
-    std::string lexeme;
-    std::variant<int, std::string> literal;
-    int line;
+    TokenType m_type;
+    std::string m_lexeme;
+    std::variant<bool, int, std::string> m_literal;
+    int m_line;
 };
 
 #endif
