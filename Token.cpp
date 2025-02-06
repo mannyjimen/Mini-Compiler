@@ -1,7 +1,6 @@
 #ifndef _TOKEN_
 #define _TOKEN_
 
-#include <iostream>
 #include <string>
 #include <variant>
 
@@ -34,8 +33,28 @@ class Token{
     }
 
     std::string toString(){
-        return 
+        return getTypeString() + " " + m_lexeme + " " + getLiteralString();  
     }
+
+    //convert token type to string
+    std::string getTypeString(){
+    }
+
+    //convert literal to string
+    std::string getLiteralString(){
+        if (std::get_if<bool>(&m_literal)){
+            if (std::get<bool>(m_literal) == 0)
+                return "0";
+            else
+                return "1";
+        }
+        else if (std::get_if<int>(&m_literal)){
+            return std::to_string(std::get<int>(m_literal));
+        }
+        //if literal is string
+        return std::get<std::string>(m_literal);
+    }
+
     private:
     TokenType m_type;
     std::string m_lexeme;
