@@ -1,8 +1,13 @@
 # CPPLox
-Programming language implementation to get more experience with the process of lexing, parsing, and execution.
-To write a fully functional implementation of Lox from Robert Nystrom's Crafting Interpreters in C++ (as well
-as maybe add a couple cool features myself!)
+Implementation of an interpreter for the Lox programming language in C++.
+Following through Bob Nystrom's book Crafting Interpreters <https://craftinginterpreters.com>
 
 ### Parts
-- Lexer :x:
+- Scanner :soon:
 - Parser :x:
+
+### Possible additional features
+Possible Features yet to be implemented, not shown in the book.
+- Conditional Operators :x:
+- Array and list support :x:
+- Error reporter (improved error message system) :x:
