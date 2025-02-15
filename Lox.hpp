@@ -4,20 +4,21 @@
 #include <vector>
 #include <iostream>
 
+static bool hadError = false;
+
 class Lox{
     public:
     Lox(int argc, char* argv[]);
-    bool hadError = false;
+
+    static void error(int line, std::string message);
 
     private:
     
-    void runPrompt();
-    void runFile(const std::string sourceFileName);
+    static void runPrompt();
+    static void runFile(const std::string sourceFileName);
 
-    void run(const std::string source);
-    
-    void error(int line, std::string message);
-    void report(int line, std::string where, std::string message);
+    static void run(const std::string source);
+    static void report(int line, std::string where, std::string message);
 };
 
 #endif
