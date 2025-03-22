@@ -1,23 +1,26 @@
 #include "Scanner.hpp"
 
+
 Scanner::Scanner(std::string source){
     this->m_source = source;
+    scanTokens();
 }
 
 std::vector<Token*> Scanner::scanTokens(){
-    while (!isAtEnd){
+    while (!isAtEnd()){
         //beginning of next lexeme
         m_start = m_current;
         scanToken();
     }
     //after we reach end of source we add EOF token
-    //not sure if nullptr will work here
-    m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", nullptr, m_line));
+    
+    //using 0 (since we dont care about the literal)
+    m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", 0, m_line));
     return m_tokens;
 }
 
 bool Scanner::isAtEnd(){
-    return m_current >= m_source.length();
+    return m_current >= m_source.size();
 }
 
 void Scanner::scanToken(){
@@ -54,6 +57,38 @@ void Scanner::scanToken(){
         case '*':
             addToken(TokenType::STAR);
             break;
+        //single char tokens that can possibly be double char tokens
+        case '!':
+            addToken(match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
+            break;
+        case '=':
+            addToken(match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
+            break;
+        case '<':
+            addToken(match('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
+            break;
+        case '>':
+            addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
+            break;
+        case '/':
+            if (match('/')){
+                //we know its a comment, get to end of the line
+                while (peek() != '\n' && !isAtEnd())
+                    advance();
+            }
+            else{
+                addToken(TokenType::SLASH);
+            }
+            break;
+        //whitespace ignoring
+        case ' ':
+        case '\r':
+        case '\t':
+            break;
+        case '\n':
+            this->m_line++;
+            break;
+        
         default:
             //if encountered undefined single char Token
             Lox::error(m_line, "Unexpected character.");
@@ -62,5 +97,30 @@ void Scanner::scanToken(){
 }
 
 char Scanner::advance(){
+    return this->m_source[m_current++];
+}
+
+bool Scanner::match(char expected){
+    if (isAtEnd())
+        return false;
+    if (this->m_source[m_current] != expected)
+        return false;
     
+    //will consume current character (since we know its part of lexeme)
+    this->m_current++;
+    return true;
+}
+
+char Scanner::peek(){
+    if (isAtEnd())
+        return '\0';
+    return this->m_source[this->m_current];
+}
+
+//using 0 as variant since we dont care in this case
+void Scanner::addToken(TokenType type){
+    addToken(type, 0);
+}
+
+void Scanner::addToken(TokenType type, std::variant<bool, int, std::string>){
 }

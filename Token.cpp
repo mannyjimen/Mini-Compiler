@@ -108,4 +108,5 @@ std::string Token::getLiteralString(){
     }
     //if literal is string
     return std::get<std::string>(m_literal);
+
 }

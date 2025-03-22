@@ -10,23 +10,34 @@
 #include <map>
 
 class Scanner{
-    std::string m_source;
-    std::vector<Token*> m_tokens;
-    int m_start = 0;
-    int m_current = 0;
-    int m_line = 1;
 
+public:
+    //scanner constructor
     Scanner(std::string source);
+    //scanning entire source
     std::vector<Token*> scanTokens();
-    //token scanning 
+    //scanning individual lexemes
     void scanToken();
+    
+    //consume next char in source
     char advance();
-    //helper functions
+    //return whether next char is expected char
+    bool match(char expected);
+    char peek();
+    
+    //addTokens
     void addToken(TokenType type);
     void addToken(TokenType type, std::variant<bool, int, std::string> literal);
 
     //checks if scanner is at end of source
     bool isAtEnd();
+
+private:
+    std::string m_source;
+    std::vector<Token*> m_tokens;
+    int m_start = 0;
+    int m_current = 0;
+    int m_line = 1;
 };
 
 #endif

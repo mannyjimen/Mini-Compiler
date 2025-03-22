@@ -8,12 +8,13 @@ static bool hadError = false;
 
 class Lox{
     public:
+    //constructor
     Lox(int argc, char* argv[]);
 
+    //static error function
     static void error(int line, std::string message);
 
     private:
-    
     static void runPrompt();
     static void runFile(const std::string sourceFileName);
 

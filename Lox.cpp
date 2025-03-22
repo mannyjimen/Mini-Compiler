@@ -1,9 +1,11 @@
 #include "Lox.hpp"
+#include "Scanner.hpp"
 
 Lox::Lox(int argc, char* argv[]){
     //learn about exceptions throw catch
     if (argc > 2){
         error(-1, "Too many arguments when executing");
+        return;
     }
     if (argc == 1){
         runPrompt();
@@ -29,8 +31,9 @@ void Lox::runPrompt(){
 void Lox::runFile(const std::string sourceFileName){
     std::string entireProg = "";
     std::string temp;
-    
+
     std::ifstream sourceFile;
+    //still have to implement error if file not found
     sourceFile.open(sourceFileName);
     while (!sourceFile.eof()){
         std::getline(sourceFile, temp);
@@ -42,11 +45,12 @@ void Lox::runFile(const std::string sourceFileName){
 }
 
 void Lox::run(const std::string source){
+    Scanner main(source);
     //check if theres error in code
-
     if (hadError){
         return;
     }
+    //we are going to execute !!!
 }
 
 void Lox::error(int lineNum, std::string errorMessage){
