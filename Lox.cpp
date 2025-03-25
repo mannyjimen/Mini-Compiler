@@ -29,19 +29,16 @@ void Lox::runPrompt(){
 }
 
 void Lox::runFile(const std::string sourceFileName){
-    std::string entireProg = "";
-    std::string temp;
+    std::string currentLineSource;
 
     std::ifstream sourceFile;
     //still have to implement error if file not found
     sourceFile.open(sourceFileName);
     while (!sourceFile.eof()){
-        std::getline(sourceFile, temp);
-        entireProg += temp;
+        std::getline(sourceFile, currentLineSource);
+        run(currentLineSource);
     }
     sourceFile.close();
-
-    run(entireProg);
 }
 
 void Lox::run(const std::string source){
@@ -58,6 +55,6 @@ void Lox::error(int lineNum, std::string errorMessage){
 }
 
 void Lox::report(int lineNum, std::string where, std::string message){
-    std::cerr << "[line " << lineNum << "]" << " Error" << where << ": " << message;
+    std::cerr << "[line " << lineNum << "]" << " Error" << where << ": " << message << std::endl;
     hadError = true;
 }
