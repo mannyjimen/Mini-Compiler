@@ -33,6 +33,8 @@ class Token{
     std::string getTypeString();
     //converts token literal to string (helper for toString)
     std::string getLiteralString();
+    //returns lexeme of token
+    std::string getLexeme();
 
     private:
     TokenType m_type;

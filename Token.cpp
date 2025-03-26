@@ -110,3 +110,7 @@ std::string Token::getLiteralString(){
     return std::get<std::string>(m_literal);
 
 }
+
+std::string Token::getLexeme(){
+    return m_lexeme;
+}
