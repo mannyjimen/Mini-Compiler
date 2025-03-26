@@ -24,6 +24,9 @@ public:
     //return whether next char is expected char
     bool match(char expected);
     char peek();
+
+    //string scan
+    void string();
     
     //addTokens
     void addToken(TokenType type);
@@ -31,6 +34,9 @@ public:
 
     //checks if scanner is at end of source
     bool isAtEnd();
+
+    //prints every token in m_tokens (helper function)
+    void printTokens();
 
 private:
     std::string m_source;
