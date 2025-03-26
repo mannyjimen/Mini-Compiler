@@ -29,15 +29,19 @@ void Lox::runPrompt(){
 }
 
 void Lox::runFile(const std::string sourceFileName){
-    std::string currentLineSource;
+    std::string currentLine;
+    std::string entireProg = "";
 
     std::ifstream sourceFile;
     //still have to implement error if file not found
     sourceFile.open(sourceFileName);
+    //line by line, but sticking entire prog into one string, separated by '\n'
     while (!sourceFile.eof()){
-        std::getline(sourceFile, currentLineSource);
-        run(currentLineSource);
+        std::getline(sourceFile, currentLine);
+        entireProg = entireProg + currentLine + '\n'; 
     }
+    run(entireProg);
+
     sourceFile.close();
 }
 
