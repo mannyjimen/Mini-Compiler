@@ -28,7 +28,7 @@ void Lox::runPrompt(){
     }
 }
 
-void Lox::runFile(const std::string sourceFileName){
+void Lox::runFile(const std::string& sourceFileName){
     std::string currentLine;
     std::string entireProg = "";
 
@@ -45,7 +45,7 @@ void Lox::runFile(const std::string sourceFileName){
     sourceFile.close();
 }
 
-void Lox::run(const std::string source){
+void Lox::run(const std::string& source){
     Scanner main(source);
     //check if theres error in code
     if (hadError){
@@ -54,11 +54,11 @@ void Lox::run(const std::string source){
     //we are going to execute !!!
 }
 
-void Lox::error(int lineNum, std::string errorMessage){
+void Lox::error(int lineNum, const std::string& errorMessage){
     report(lineNum, "", errorMessage);
 }
 
-void Lox::report(int lineNum, std::string where, std::string message){
+void Lox::report(int lineNum, const std::string& where, const std::string& message){
     std::cerr << "[line " << lineNum << "]" << " Error" << where << ": " << message << std::endl;
     hadError = true;
 }
