@@ -13,7 +13,7 @@ std::vector<Token*> Scanner::scanTokens(){
     }
     //after we reach end of source we add EOF token, using 0 (since we dont care about the literal)
     m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", 0.0, m_line));
-    printTokens();
+    //printTokens();
     return m_tokens;
 }
 
@@ -100,6 +100,9 @@ void Scanner::scanToken(){
             //if encountered undefined single char Token
             if(isDigit(c))
                 number();
+            else if (isAlpha(c)){
+                identifier();
+            }
             else{
                 Lox::error(m_line, "Unexpected character");
             }
@@ -161,6 +164,16 @@ void Scanner::string(){
 bool Scanner::isDigit(const char& c) const{
     return c >= '0' && c <= '9';
 }
+//checks if c is alpha (letter) in case of identifier
+bool Scanner::isAlpha(const char& c) const{
+    return (c >= 'a' && c <= 'z')
+         ||(c >= 'A' && c <= 'Z')
+         || c == '_';
+}
+
+bool Scanner::isAlphaNumeric(const char& c) const{
+    return isAlpha(c) || isDigit(c);
+}
 
 //number scanning
 void Scanner::number(){
@@ -174,6 +187,19 @@ void Scanner::number(){
     }
 
     addToken(TokenType::NUMBER, std::stod(m_source.substr(m_start, m_current - m_start)));
+}
+
+void Scanner::identifier(){
+    while (isAlphaNumeric(peek()))
+        advance();
+
+    //finished scanning identifier
+    std::string text = m_source.substr(m_start, m_current - m_start);
+    //deciding if identifier is reserved word or user-made identifier
+    if (keywords.contains(text))
+        addToken(keywords.at(text));
+    else
+        addToken(TokenType::IDENTIFIER);
 }
 
 //using 0.0 as variant since we dont care in this case
