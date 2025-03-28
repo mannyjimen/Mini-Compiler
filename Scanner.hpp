@@ -4,16 +4,13 @@
 #include "Lox.hpp"
 #include "Token.hpp"
 
-#include <array>
-#include <unordered_map>
 #include <vector>
-#include <map>
 
 class Scanner{
 
 public:
     //scanner constructor
-    Scanner(std::string source);
+    Scanner(const std::string& source);
     //scanning entire source
     std::vector<Token*> scanTokens();
     //scanning individual lexemes
@@ -22,21 +19,25 @@ public:
     //consume next char in source
     char advance();
     //return whether next char is expected char
-    bool match(char expected);
-    char peek();
+    bool match(const char& expected);
+    char peek() const;
+    char peekNext() const;
 
     //string scan
     void string();
+    //checking digit, if so, number scan
+    bool isDigit(const char& c) const;
+    void number();
     
     //addTokens
     void addToken(TokenType type);
-    void addToken(TokenType type, std::variant<bool, int, std::string> literal);
+    void addToken(TokenType type, std::variant<bool, double, std::string> literal);
 
     //checks if scanner is at end of source
-    bool isAtEnd();
+    bool isAtEnd() const;
 
     //prints every token in m_tokens (helper function)
-    void printTokens();
+    void printTokens() const;
 
 private:
     std::string m_source;
