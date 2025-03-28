@@ -1,18 +1,18 @@
 #include "Token.hpp"
 
-Token::Token(TokenType type, std::string lexeme, std::variant<bool, int, std::string> literal, int line){
-    this->m_type = type;
-    this->m_lexeme = lexeme;
-    this->m_literal = literal;
-    this->m_line = line;
+Token::Token(TokenType type, const std::string& lexeme, std::variant<bool, double, std::string> literal, int line){
+    m_type = type;
+    m_lexeme = lexeme;
+    m_literal = literal;
+    m_line = line;
 }
 
-std::string Token::toString(){
+std::string Token::toString() const{
     return getTypeString() + " " + m_lexeme + " " + getLiteralString();  
 }
 
-std::string Token::getTypeString(){
-    switch(this->m_type){
+std::string Token::getTypeString() const{
+    switch(m_type){
         case TokenType::LEFT_PAREN:
             return "LEFT_PAREN";
         case TokenType::RIGHT_PAREN:
@@ -96,21 +96,21 @@ std::string Token::getTypeString(){
     }
 }
 
-std::string Token::getLiteralString(){
+std::string Token::getLiteralString() const{
     if (std::get_if<bool>(&m_literal)){
         if (std::get<bool>(m_literal) == 0)
             return "0";
         else
             return "1";
     }
-    else if (std::get_if<int>(&m_literal)){
-        return std::to_string(std::get<int>(m_literal));
+    else if (std::get_if<double>(&m_literal)){
+        return std::to_string(std::get<double>(m_literal));
     }
     //if literal is string
     return std::get<std::string>(m_literal);
 
 }
 
-std::string Token::getLexeme(){
+std::string Token::getLexeme() const{
     return m_lexeme;
 }

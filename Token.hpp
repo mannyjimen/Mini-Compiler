@@ -26,20 +26,20 @@ enum class TokenType{
 class Token{
     public:
     //parameterized constructor for token
-    Token(TokenType type, std::string lexeme, std::variant<bool, int, std::string> literal, int line);
+    Token(TokenType type, const std::string& lexeme, std::variant<bool, double, std::string> literal, int line);
     //convert token to string
-    std::string toString();
+    std::string toString() const;
     //converts token type to string (helper for toString)
-    std::string getTypeString();
+    std::string getTypeString() const;
     //converts token literal to string (helper for toString)
-    std::string getLiteralString();
+    std::string getLiteralString() const;
     //returns lexeme of token
-    std::string getLexeme();
+    std::string getLexeme() const;
 
     private:
     TokenType m_type;
     std::string m_lexeme;
-    std::variant<bool, int, std::string> m_literal;
+    std::variant<bool, double, std::string> m_literal;
     int m_line;
 };
 
