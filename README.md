@@ -3,7 +3,7 @@ Implementation of an interpreter for the Lox programming language in C++.
 Following through Bob Nystrom's book Crafting Interpreters <https://craftinginterpreters.com>
 
 ### Parts
-- Scanner :soon:
+- Scanner :heavy_check_mark:
 - Parser :x:
 
 ### Possible additional features
