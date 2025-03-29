@@ -13,13 +13,14 @@ std::vector<Token*> Scanner::scanTokens(){
     }
     //after we reach end of source we add EOF token, using 0 (since we dont care about the literal)
     m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", 0.0, m_line));
-    //printTokens();
+    printTokens();
     return m_tokens;
 }
 
 bool Scanner::isAtEnd() const{
     return m_current >= m_source.size();
 }
+
 
 void Scanner::scanToken(){
     char c = advance();
@@ -69,10 +70,25 @@ void Scanner::scanToken(){
             addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
             break;
         case '/':
+            //checking if single-line comment
             if (match('/')){
-                //we know its a comment, get to end of the line
                 while (peek() != '\n' && !isAtEnd())
                     advance();
+            }
+            //checking if comment-block
+            else if (match('*')){
+                while (!(peek() == '*' && peekNext() == '/')){
+                    //comment-block has no termination
+                    if (isAtEnd()){
+                        Lox::error(m_line, "Unterminated Comment-Block");
+                        return;
+                    }
+                    if (peek() == '\n')
+                        m_line++;
+                    advance();
+                }
+                //skipping past both * and / (closing block comments)
+                advance(); advance();
             }
             else{
                 addToken(TokenType::SLASH);
