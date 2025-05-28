@@ -21,7 +21,6 @@ bool Scanner::isAtEnd() const{
     return m_current >= m_source.size();
 }
 
-
 void Scanner::scanToken(){
     char c = advance();
     switch (c){
