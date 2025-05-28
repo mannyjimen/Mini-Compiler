@@ -1,5 +1,4 @@
 #include "Lox.hpp"
-#include "Scanner.hpp"
 
 Lox::Lox(int argc, char* argv[]){
     //learn about exceptions throw catch
@@ -33,6 +32,7 @@ void Lox::runFile(const std::string& sourceFileName){
     std::string entireProg = "";
 
     std::ifstream sourceFile;
+    //FIX
     //still have to implement error if file not found
     sourceFile.open(sourceFileName);
     //line by line, but sticking entire prog into one string, separated by '\n'
