@@ -211,7 +211,7 @@ void Scanner::identifier(){
     //finished scanning identifier
     std::string text = m_source.substr(m_start, m_current - m_start);
     //deciding if identifier is reserved word or user-made identifier
-    if (keywords.contains(text))
+    if (keywords.count(text))
         addToken(keywords.at(text));
     else
         addToken(TokenType::IDENTIFIER);
