@@ -20,35 +20,66 @@ Grouping::Grouping(Expr* contents){
         m_contents = contents;
     }
 
+//accept implemenatations
 
-std::string AstVisitor::visitBinary(Binary& binary){
-    return parenthesize(binary.m_op.getLexeme(), {binary.m_left, binary.m_right});
+void Binary::accept(Visitor& visitor){
+    return visitor.visit(*this);
+}
+void Literal::accept(Visitor& visitor){
+    return visitor.visit(*this);
+}
+void Unary::accept(Visitor& visitor){
+    return visitor.visit(*this);
+}
+void Grouping::accept(Visitor& visitor){
+    return visitor.visit(*this);
+}
+   
+//AST Visitor Implementations
+void AstVisitor::visit(Binary& binary){
+    parenthesize(binary.m_op.getLexeme(), {binary.m_left, binary.m_right});
 }
 
-std::string AstVisitor::visitLiteral(Literal& literal){
-    if (literal.m_lit.getTypeString() == "NIL") return "NIL";
-    return literal.m_lit.getLiteralString();
+void AstVisitor::visit(Unary& unary){
+    parenthesize(unary.m_logicalop.getLexeme(), {unary.m_operand});
 }
 
-std::string AstVisitor::visitUnary(Unary& unary){
-    return parenthesize(unary.m_logicalop.getLexeme(), {unary.m_operand});
+void AstVisitor::visit(Grouping& grouping){
+   parenthesize("group", {grouping.m_contents});
 }
 
-std::string AstVisitor::visitGrouping(Grouping& grouping){
-   return parenthesize("group", {grouping.m_contents});
+//base case recursion
+void AstVisitor::visit(Literal& literal){
+    if (literal.m_lit.getTypeString() == "NIL"){
+        returns.push("NIL");
+        return;
+    }
+    returns.push(literal.m_lit.getLiteralString());
 }
 
-std::string AstVisitor::parenthesize(std::string name, std::vector<Expr*> expr_list){
-    std::string final = "(";
+//PARENTHESIZE
+void AstVisitor::parenthesize(std::string name, std::vector<Expr*> expr_list){
+    returns.push("(" + name);
     for(Expr* expr: expr_list){
-        final += " ";
-        final += expr->acceptAstPrint(*this);
+        returns.push(" ");
+        expr->accept(*this);
     }   
-    final += ")";
-
-    return final;
+    returns.push(")");
 }
 
+//AstPrinter print
+void AstPrinter::print(Expr* expr){
+    expr->accept(*this);
+    std::string final = "";
+    while (!returns.empty()){
+        final += returns.front();
+        returns.pop();
+    }
+    //return
+    std::cout << final << std::endl;
+}
+
+//test main function
 int main(){
     Binary* test = new Binary(
         new Unary(
@@ -59,5 +90,6 @@ int main(){
             new Literal(Token(TokenType::NUMBER, "45,67", 45.67, 1)))
     );
 
-    std::cout << (new AstPrinter)->print(test);
+    AstPrinter astprinter;
+    astprinter.print(test);
 }
