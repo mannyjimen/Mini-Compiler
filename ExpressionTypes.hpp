@@ -1,13 +1,16 @@
+#ifndef _EXPR_
+#define _EXPR_
+
 //FIX-MAYBE:
 //Stubbing all member Tokens since error because Token doesn't
 //have default constructor.
-#include "Token.hpp"
+#include "Lox.hpp"
 
 #include <iostream>
 #include <string>
 #include <vector>
-#include <stack>
 #include <queue>
+#include <variant>
 
 struct Binary;
 struct Literal;
@@ -15,6 +18,7 @@ struct Unary;
 struct Grouping;
 struct Expr;
 
+//Visitor interface / abstract class
 class Visitor{
 public:
     virtual void visit(Binary& binary) = 0;
@@ -23,7 +27,7 @@ public:
     virtual void visit(Grouping& grouping) = 0;
 };
 
-//visitor for printing AST of expresssion.
+//visitor for printing AST of expresssion / Concrete
 class AstVisitor : public Visitor {
 public:
     void visit(Binary & binary) override;
@@ -41,6 +45,7 @@ public:
     void print(Expr* expr);
 };
 
+//Expr interface / abstract class
 class Expr{
 public: 
     virtual void accept(Visitor& visitor) = 0;
@@ -57,9 +62,11 @@ struct Binary : public Expr{
 };
 
 struct Literal : public Expr{
-    Literal(Token lit);
+    Literal(bool lit);
+    Literal(double lit);
+    Literal(std::string lit);
 
-    Token m_lit = Token(TokenType::NIL, "NIL", "NIL", 0);
+    std::variant<bool, double, std::string> m_lit;
 
     void accept(Visitor& visitor) override;
 };
@@ -80,3 +87,5 @@ struct Grouping : public Expr{
 
     void accept(Visitor& visitor) override;
 };
+
+#endif

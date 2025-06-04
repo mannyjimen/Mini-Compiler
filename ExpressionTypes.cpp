@@ -7,7 +7,13 @@ Binary::Binary(Expr* left, Token op, Expr* right){
         m_right = right;
 }
 
-Literal::Literal(Token lit){
+Literal::Literal(bool lit){
+        m_lit = lit;
+    }
+Literal::Literal(double lit){
+        m_lit = lit;
+    }
+Literal::Literal(std::string lit){
         m_lit = lit;
     }
 
@@ -19,7 +25,7 @@ Unary::Unary(Token logicalop, Expr* operand){
 Grouping::Grouping(Expr* contents){
         m_contents = contents;
     }
-
+    
 //accept implemenatations
 
 void Binary::accept(Visitor& visitor){
@@ -50,11 +56,30 @@ void AstVisitor::visit(Grouping& grouping){
 
 //base case recursion
 void AstVisitor::visit(Literal& literal){
-    if (literal.m_lit.getTypeString() == "NIL"){
-        returns.push("NIL");
+    std::string litToString;
+    //literal is boolean
+    if(std::get_if<bool>(&literal.m_lit)){
+        if(std::get<bool>(literal.m_lit) == 0){
+            returns.push("false");
+            return;
+        }
+        else{
+            returns.push("true");
+            return;
+        }
+    }
+    else if (std::get_if<double>(&literal.m_lit)){
+        returns.push(std::to_string(std::get<double>(literal.m_lit)));
         return;
     }
-    returns.push(literal.m_lit.getLiteralString());
+    //literal is string
+    returns.push(std::get<std::string>(literal.m_lit));
+
+    // if (literal.m_lit == "NIL"){
+    //     returns.push("NIL");
+    //     return;
+    // }
+    // returns.push(literal.m_lit.getLiteralString());
 }
 
 //PARENTHESIZE
@@ -84,12 +109,29 @@ int main(){
     Binary* test = new Binary(
         new Unary(
             Token(TokenType::MINUS, "-", 0.0, 1),
-            new Literal(Token(TokenType::NUMBER, "123", 123.0, 1))),
+            new Literal(123.0)),
         Token(TokenType::STAR, "*", 0.0, 1),
         new Grouping(
-            new Literal(Token(TokenType::NUMBER, "45,67", 45.67, 1)))
+            new Literal(45.67))
     );
 
+    Binary* test2 = new Binary(
+        new Unary(
+            Token(TokenType::MINUS, "-", 0.0, 1),
+            new Literal(356.0)),
+        Token(TokenType::STAR, "*", 0.0, 1),
+        new Binary(
+            new Unary(
+                Token(TokenType::MINUS, "-", 0.0, 1),
+                new Literal(123.0)),
+            Token(TokenType::STAR, "*", 0.0, 1),
+            new Grouping(
+                new Literal(45.65))
+            
+        )
+    );
+
+
     AstPrinter astprinter;
-    astprinter.print(test);
+    astprinter.print(test2);
 }
