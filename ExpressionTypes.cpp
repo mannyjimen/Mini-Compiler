@@ -7,15 +7,19 @@ Binary::Binary(Expr* left, Token op, Expr* right){
         m_right = right;
 }
 
-Literal::Literal(bool lit){
-        m_lit = lit;
-    }
-Literal::Literal(double lit){
-        m_lit = lit;
-    }
-Literal::Literal(std::string lit){
-        m_lit = lit;
-    }
+// Literal::Literal(bool lit){
+//         m_lit = lit;
+//     }
+// Literal::Literal(double lit){
+//         m_lit = lit;
+//     }
+// Literal::Literal(std::string lit){
+//         m_lit = lit;
+//     }
+
+Literal::Literal(std::variant<bool, double, std::string> lit){
+    m_lit = lit;
+}
 
 Unary::Unary(Token logicalop, Expr* operand){
         m_logicalop = logicalop;
@@ -118,7 +122,7 @@ int main(){
     Binary* test2 = new Binary(
         new Unary(
             Token(TokenType::MINUS, "-", 0.0, 1),
-            new Literal(356.0)),
+            new Literal("HEY")),
         Token(TokenType::STAR, "*", 0.0, 1),
         new Binary(
             new Unary(

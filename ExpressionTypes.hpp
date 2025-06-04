@@ -62,9 +62,11 @@ struct Binary : public Expr{
 };
 
 struct Literal : public Expr{
-    Literal(bool lit);
-    Literal(double lit);
-    Literal(std::string lit);
+    // Literal(bool lit);
+    // Literal(double lit);
+    // Literal(std::string lit);
+
+    Literal(std::variant<bool, double, std::string> lit);
 
     std::variant<bool, double, std::string> m_lit;
 
