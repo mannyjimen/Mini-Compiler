@@ -1,8 +1,9 @@
 #ifndef _LOX_
 #define _LOX_
 
-#include "Scanner.hpp"
 #include "Token.hpp"
+#include "Scanner.hpp"
+#include "ExpressionTypes.hpp"
 
 #include <fstream>
 #include <iostream>

@@ -2,10 +2,10 @@
 #define _SCANNER_
 
 #include "Lox.hpp"
-#include "Token.hpp"
 
 #include <vector>
 #include <unordered_map>
+#include <string>
 
 class Scanner{
 

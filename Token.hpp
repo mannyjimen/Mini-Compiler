@@ -36,7 +36,6 @@ class Token{
     //returns lexeme of token
     std::string getLexeme() const;
 
-    private:
     TokenType m_type;
     std::string m_lexeme;
     std::variant<bool, double, std::string> m_literal;
