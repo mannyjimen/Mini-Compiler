@@ -6,11 +6,11 @@
 //have default constructor.
 #include "Lox.hpp"
 
-#include <iostream>
 #include <string>
 #include <vector>
 #include <queue>
 #include <variant>
+#include <iostream>
 
 struct Binary;
 struct Literal;
@@ -35,7 +35,7 @@ public:
     void visit(Unary& unary) override;
     void visit(Grouping& grouping) override;
 
-    void parenthesize(std::string name, std::vector<Expr*> expr_list);
+    void parenthesize(const std::string& name, const std::vector<Expr*>& expr_list);
 
     std::queue<std::string> returns;
 };
@@ -52,7 +52,7 @@ public:
 };
 
 struct Binary : public Expr{
-    Binary(Expr* left, Token op, Expr* right);
+    Binary(Expr* left, const Token& op, Expr* right);
 
     Expr* m_left;
     Token m_op = Token(TokenType::NIL, "NIL", "NIL", 0);
@@ -66,7 +66,7 @@ struct Literal : public Expr{
     // Literal(double lit);
     // Literal(std::string lit);
 
-    Literal(std::variant<bool, double, std::string> lit);
+    Literal(const std::variant<bool, double, std::string>& lit);
 
     std::variant<bool, double, std::string> m_lit;
 
@@ -74,7 +74,7 @@ struct Literal : public Expr{
 };
 
 struct Unary : public Expr{
-    Unary(Token logicalop, Expr* operand);
+    Unary(const Token& logicalop, Expr* operand);
 
     Token m_logicalop = Token(TokenType::NIL, "NIL", "NIL", 0);
     Expr* m_operand;
