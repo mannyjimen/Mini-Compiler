@@ -1,6 +1,6 @@
 #include "Parser.hpp"
-//CONSTRUCTION OF TREE. Making sure grammar is good, and constructing
-//AST out of all these tokens!
+/*CONSTRUCTION OF TREE. Making sure grammar is good, and constructing
+AST out of all these tokens!*/
 
 bool Parser::match(const std::vector<TokenType> types){
     for (const TokenType& type: types){
@@ -10,6 +10,11 @@ bool Parser::match(const std::vector<TokenType> types){
         }
     }
     return false;
+}
+
+Token Parser::consume(const TokenType& type, const std::string& message){
+    if(check(type)) return advance();
+    Parser::error(peek(), message);
 }
 
 Token Parser::advance(){
@@ -116,4 +121,9 @@ Expr* Parser::primary(){
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return new Grouping(expr);
     }
+}
+
+ParseError Parser::error(const Token& token, const std::string& message){
+    Lox::error(token, message);
+    ParseError signal; return signal;
 }

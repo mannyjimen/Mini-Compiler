@@ -4,10 +4,14 @@
 #include "Lox.hpp"
 
 #include <vector>
+#include <string>
+
+class ParseError{
+};
 
 class Parser{
 public:
-    Parser(std::vector<Token> tokens);
+    Parser(const std::vector<Token>& tokens);
 
 private:
     std::vector<Token>  m_tokens;
@@ -15,7 +19,8 @@ private:
 
     //checks if the current token matches any of the given types, consumes if so
     bool match(const std::vector<TokenType> types);
-    //checks if current token == type (doesnt consume token)
+    Token consume(const TokenType& type, const std::string& message);
+    //checks if current token == type (doesnt consume token, for match/consume)
     bool check(const TokenType type) const;
     //returns previous token 
     Token previous() const;
@@ -25,7 +30,7 @@ private:
     Token peek() const;
     
     bool isAtEnd() const;
-
+    
     Expr* expression();
     Expr* equality();
     Expr* comparison();
@@ -35,7 +40,7 @@ private:
     Expr* primary();
 
     //error functions
-    Token consume(TokenType type, std::string message);
+    static ParseError error(const Token& token, const std::string& message);
 };
 
 #endif
