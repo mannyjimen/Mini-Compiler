@@ -13,7 +13,7 @@ std::vector<Token*> Scanner::scanTokens(){
     }
     //after we reach end of source we add EOF token, using 0 (since we dont care about the literal)
     m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", 0.0, m_line));
-    printTokens();
+    printTokens(); //helper
     return m_tokens;
 }
 
@@ -232,7 +232,7 @@ void Scanner::addToken(TokenType type, std::variant<bool, double, std::string> l
 
 //print all tokens in m_tokens
 void Scanner::printTokens() const{
-    for (auto it: m_tokens){
+    for (Token* it: m_tokens){
         std::cout << "Token Type: " << it->getTypeString() << " |";
         std::cout << " Literal: " << it->getLiteralString() << " |";
         std::cout << " Lexeme: " << it->getLexeme() << std::endl;
