@@ -13,7 +13,7 @@ std::vector<Token*> Scanner::scanTokens(){
     }
     //after we reach end of source we add EOF token, using 0 (since we dont care about the literal)
     m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", 0.0, m_line));
-    printTokens(); //helper
+    //printTokens(); //helper
     return m_tokens;
 }
 
