@@ -14,7 +14,8 @@ bool Parser::match(const std::vector<TokenType> types){
 
 Token Parser::consume(const TokenType& type, const std::string& message){
     if(check(type)) return advance();
-    Parser::error(peek(), message);
+    //throwing ParseError, will be caught in parse()
+    throw error(peek(), message);
 }
 
 Token Parser::advance(){
@@ -37,6 +38,14 @@ Token Parser::previous() const{
 
 bool Parser::isAtEnd() const{
     return peek().m_type == TokenType::ENDOFFILE;
+}
+
+Expr* Parser::parse(){
+    try{
+        return expression();
+    } catch (ParseError error){
+        return nullptr;
+    }
 }
 
 Expr* Parser::expression(){
@@ -121,9 +130,37 @@ Expr* Parser::primary(){
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return new Grouping(expr);
     }
+
+    throw error(peek(), "Expect expression.");
 }
+
+//Error function implementations
 
 ParseError Parser::error(const Token& token, const std::string& message){
     Lox::error(token, message);
     ParseError signal; return signal;
+}
+
+void Parser::synchronize(){
+    //currently at broken token, going to move forward once.
+    advance();
+
+    while(!isAtEnd()){
+        //checking if we are at the start of a statement
+        //PROBABLY starting a new statement (not guaranteed)
+        if(previous().m_type == TokenType::SEMICOLON) return;
+        switch(peek().m_type){
+            case TokenType::RETURN:
+            case TokenType::PRINT:
+            case TokenType::FOR:
+            case TokenType::WHILE:
+            case TokenType::IF:
+            case TokenType::CLASS:
+            case TokenType::FUN:
+            case TokenType::VAR:
+                return;
+        }
+        //discarding token
+        advance();
+    }
 }

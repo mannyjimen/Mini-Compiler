@@ -31,6 +31,9 @@ private:
     
     bool isAtEnd() const;
     
+    //initial, main method
+    Expr* parse();
+
     Expr* expression();
     Expr* equality();
     Expr* comparison();
@@ -41,6 +44,7 @@ private:
 
     //error functions
     static ParseError error(const Token& token, const std::string& message);
+    void synchronize();
 };
 
 #endif
