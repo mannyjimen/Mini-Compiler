@@ -46,11 +46,17 @@ void Lox::runFile(const std::string& sourceFileName){
 }
 
 void Lox::run(const std::string& source){
-    Scanner main(source);
+    Scanner scanner(source);
+    std::vector<Token*> tokens = scanner.scanTokens();
+    Parser parser(tokens);
+    Expr* expression = parser.parse();
     //check if theres error in code
     if (hadError){
         return;
     }
+    //printer helper
+    AstPrinter astprinter;
+    astprinter.print(expression);
     //we are going to execute !!!
 }
 
@@ -60,7 +66,7 @@ void Lox::error(int lineNum, const std::string& errorMessage){
 
 void Lox::error(Token token, const std::string& errorMessage){
     if (token.m_type == TokenType::ENDOFFILE){
-        report(token.m_line, "at end", errorMessage);
+        report(token.m_line, " at end", errorMessage);
     }
     else {
         report(token.m_line, " at '" + token.m_lexeme + "'", errorMessage);
