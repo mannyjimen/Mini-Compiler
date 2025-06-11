@@ -4,6 +4,7 @@
 #include "Token.hpp"
 #include "Scanner.hpp"
 #include "ExpressionTypes.hpp"
+#include "Parser.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -19,6 +20,7 @@ class Lox{
     //static error function
     static void error(int line, const std::string& message);
     static void error(Token token, const std::string& message);
+
 
     private:
     //run from prompt

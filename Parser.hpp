@@ -1,6 +1,7 @@
 #ifndef _PARSER_
 #define _PARSER_
 
+#include "ExpressionTypes.hpp"
 #include "Lox.hpp"
 
 #include <vector>
@@ -11,10 +12,12 @@ class ParseError{
 
 class Parser{
 public:
-    Parser(const std::vector<Token>& tokens);
+    Parser(const std::vector<Token*> tokens);
+    //initial, main method
+    Expr* parse();
 
 private:
-    std::vector<Token>  m_tokens;
+    std::vector<Token*>  m_tokens;
     int m_current = 0;
 
     //checks if the current token matches any of the given types, consumes if so
@@ -30,9 +33,6 @@ private:
     Token peek() const;
     
     bool isAtEnd() const;
-    
-    //initial, main method
-    Expr* parse();
 
     Expr* expression();
     Expr* equality();

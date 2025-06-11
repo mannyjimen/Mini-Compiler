@@ -2,6 +2,10 @@
 /*CONSTRUCTION OF TREE. Making sure grammar is good, and constructing
 AST out of all these tokens!*/
 
+Parser::Parser(std::vector<Token*> tokens){
+    m_tokens = tokens;
+}
+
 bool Parser::match(const std::vector<TokenType> types){
     for (const TokenType& type: types){
         if (check(type)){
@@ -29,11 +33,11 @@ bool Parser::check(TokenType type) const{
 }
 
 Token Parser::peek() const{
-    return m_tokens[m_current];
+    return *m_tokens[m_current];
 }
 
 Token Parser::previous() const{
-    return m_tokens[m_current - 1];
+    return *m_tokens[m_current - 1];
 }
 
 bool Parser::isAtEnd() const{
