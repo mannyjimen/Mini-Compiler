@@ -92,35 +92,35 @@ void AstPrinter::print(Expr* expr){
 }
 
 //test main function
-int main(){
-    Binary* test = new Binary(
-        new Unary(
-            Token(TokenType::MINUS, "-", 0.0, 1),
-            new Literal(false)),
-        Token(TokenType::STAR, "*", 0.0, 1),
-        new Grouping(
-            new Literal(45.67))
-    );
+// int main(){
+//     Binary* test = new Binary(
+//         new Unary(
+//             Token(TokenType::MINUS, "-", 0.0, 1),
+//             new Literal(false)),
+//         Token(TokenType::STAR, "*", 0.0, 1),
+//         new Grouping(
+//             new Literal(45.67))
+//     );
 
-    Binary* test2 = new Binary(
-        new Unary(
-            Token(TokenType::MINUS, "-", 0.0, 1),
-            new Literal("HEY")),
-        Token(TokenType::STAR, "*", 0.0, 1),
-        new Binary(
-            new Unary(
-                Token(TokenType::MINUS, "-", 0.0, 1),
-                new Literal(123.0)),
-            Token(TokenType::STAR, "*", 0.0, 1),
-            new Grouping(
-                new Literal(true))
+//     Binary* test2 = new Binary(
+//         new Unary(
+//             Token(TokenType::MINUS, "-", 0.0, 1),
+//             new Literal("HEY")),
+//         Token(TokenType::STAR, "*", 0.0, 1),
+//         new Binary(
+//             new Unary(
+//                 Token(TokenType::MINUS, "-", 0.0, 1),
+//                 new Literal(123.0)),
+//             Token(TokenType::STAR, "*", 0.0, 1),
+//             new Grouping(
+//                 new Literal(true))
             
-        )
-    );
+//         )
+//     );
 
-    Binary* test3 = new Binary(test, Token(TokenType::SLASH, "/", 0.0, 1), test2);
+//     Binary* test3 = new Binary(test, Token(TokenType::SLASH, "/", 0.0, 1), test2);
 
 
-    AstPrinter astprinter;
-    astprinter.print(test3);
-}
+//     AstPrinter astprinter;
+//     astprinter.print(test3);
+// }

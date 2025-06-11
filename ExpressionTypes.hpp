@@ -4,7 +4,7 @@
 //FIX-MAYBE:
 //Stubbing all member Tokens since error because Token doesn't
 //have default constructor.
-#include "Lox.hpp"
+#include "Token.hpp"
 
 #include <string>
 #include <vector>
@@ -12,11 +12,11 @@
 #include <variant>
 #include <iostream>
 
-struct Binary;
-struct Literal;
-struct Unary;
-struct Grouping;
-struct Expr;
+class Binary;
+class Literal;
+class Unary;
+class Grouping;
+class Expr;
 
 //Visitor interface / abstract class
 class Visitor{
