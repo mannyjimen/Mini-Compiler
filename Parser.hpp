@@ -6,18 +6,19 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 class ParseError{
 };
 
 class Parser{
 public:
-    Parser(const std::vector<Token*> tokens);
+    Parser(const std::vector<std::shared_ptr<Token>> tokens);
     //initial, main method
-    Expr* parse();
+    std::shared_ptr<Expr> parse();
 
 private:
-    std::vector<Token*>  m_tokens;
+    std::vector<std::shared_ptr<Token>>  m_tokens;
     int m_current = 0;
 
     //checks if the current token matches any of the given types, consumes if so
@@ -34,13 +35,13 @@ private:
     
     bool isAtEnd() const;
 
-    Expr* expression();
-    Expr* equality();
-    Expr* comparison();
-    Expr* term();
-    Expr* factor();
-    Expr* unary();
-    Expr* primary();
+    std::shared_ptr<Expr> expression();
+    std::shared_ptr<Expr> equality();
+    std::shared_ptr<Expr> comparison();
+    std::shared_ptr<Expr> term();
+    std::shared_ptr<Expr> factor();
+    std::shared_ptr<Expr> unary();
+    std::shared_ptr<Expr> primary();
 
     //error functions
     static ParseError error(const Token& token, const std::string& message);

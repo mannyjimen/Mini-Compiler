@@ -6,8 +6,15 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <memory>
 
 class Scanner{
+
+    std::string m_source;
+    std::vector<std::shared_ptr<Token>> m_tokens;
+    int m_start = 0;
+    int m_current = 0;
+    int m_line = 1;
 
 public:
     //hashmap for keywords (reserved words)
@@ -34,7 +41,7 @@ public:
     //scanner constructor
     Scanner(const std::string& source);
     //scanning entire source
-    std::vector<Token*> scanTokens();
+    std::vector<std::shared_ptr<Token>> scanTokens();
     //scanning individual lexemes
     void scanToken();
     
@@ -67,15 +74,7 @@ public:
 
     //prints every token in m_tokens (helper function)
     void printTokens() const;
-
-private:
-    std::string m_source;
-    std::vector<Token*> m_tokens;
-    int m_start = 0;
-    int m_current = 0;
-    int m_line = 1; 
-
-    
+     
 };
 
 #endif

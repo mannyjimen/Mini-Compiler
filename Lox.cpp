@@ -47,9 +47,9 @@ void Lox::runFile(const std::string& sourceFileName){
 
 void Lox::run(const std::string& source){
     Scanner scanner(source);
-    std::vector<Token*> tokens = scanner.scanTokens();
+    std::vector<std::shared_ptr<Token>> tokens = scanner.scanTokens();
     Parser parser(tokens);
-    Expr* expression = parser.parse();
+    std::shared_ptr<Expr> expression = parser.parse();
     //check if theres error in code
     if (hadError){
         return;

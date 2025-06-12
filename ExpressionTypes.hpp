@@ -11,6 +11,7 @@
 #include <queue>
 #include <variant>
 #include <iostream>
+#include <memory>
 
 class Binary;
 class Literal;
@@ -30,19 +31,19 @@ public:
 //visitor for printing AST of expresssion / Concrete
 class AstVisitor : public Visitor {
 public:
-    void visit(Binary & binary) override;
+    void visit(Binary& binary) override;
     void visit(Literal& literal) override;
     void visit(Unary& unary) override;
     void visit(Grouping& grouping) override;
 
-    void parenthesize(const std::string& name, const std::vector<Expr*>& expr_list);
+    void parenthesize(const std::string& name, const std::vector<std::shared_ptr<Expr>>& expr_list);
 
     std::queue<std::string> returns;
 };
 
 class AstPrinter : AstVisitor {
 public:
-    void print(Expr* expr);
+    void print(std::shared_ptr<Expr> expr);
 };
 
 //Expr interface / abstract class
@@ -52,20 +53,16 @@ public:
 };
 
 struct Binary : public Expr{
-    Binary(Expr* left, const Token& op, Expr* right);
+    Binary(std::shared_ptr<Expr> left, const Token& op, std::shared_ptr<Expr> right);
 
-    Expr* m_left;
+    std::shared_ptr<Expr> m_left;
     Token m_op = Token(TokenType::NIL, "NIL", "NIL", 0);
-    Expr* m_right;
+    std::shared_ptr<Expr> m_right;
 
     void accept(Visitor& visitor) override;
 };
 
 struct Literal : public Expr{
-    // Literal(bool lit);
-    // Literal(double lit);
-    // Literal(std::string lit);
-
     Literal(const std::variant<bool, double, std::string>& lit);
 
     std::variant<bool, double, std::string> m_lit;
@@ -74,18 +71,18 @@ struct Literal : public Expr{
 };
 
 struct Unary : public Expr{
-    Unary(const Token& logicalop, Expr* operand);
+    Unary(const Token& logicalop, std::shared_ptr<Expr> operand);
 
     Token m_logicalop = Token(TokenType::NIL, "NIL", "NIL", 0);
-    Expr* m_operand;
+    std::shared_ptr<Expr> m_operand;
 
     void accept(Visitor& visitor) override;
     
 };
 
 struct Grouping : public Expr{
-    Grouping(Expr* contents);
-    Expr* m_contents;
+    Grouping(std::shared_ptr<Expr> contents);
+    std::shared_ptr<Expr> m_contents;
 
     void accept(Visitor& visitor) override;
 };

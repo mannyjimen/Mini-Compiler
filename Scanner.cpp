@@ -5,14 +5,15 @@ Scanner::Scanner(const std::string& source){
     scanTokens();
 }
 
-std::vector<Token*> Scanner::scanTokens(){
+std::vector<std::shared_ptr<Token>> Scanner::scanTokens(){
     while (!isAtEnd()){
         //beginning of next lexeme
         m_start = m_current;
         scanToken();
     }
     //after we reach end of source we add EOF token, using 0 (since we dont care about the literal)
-    m_tokens.push_back(new Token(TokenType::ENDOFFILE, "", 0.0, m_line));
+    std::shared_ptr<Token> temp(new Token(TokenType::ENDOFFILE, "", 0.0, m_line));
+    m_tokens.push_back(temp);
     //printTokens(); //helper
     return m_tokens;
 }
@@ -119,7 +120,7 @@ void Scanner::scanToken(){
                 identifier();
             }
             else{
-                Lox::error(m_line, "Unexpected character");
+                Lox::error(m_line, "Unexpected character.");
             }
             break;
     }
@@ -227,12 +228,13 @@ void Scanner::addToken(TokenType type, std::variant<bool, double, std::string> l
     //retrieving lexeme
     std::string text = m_source.substr(m_start, m_current - m_start);
     //pushing token with attributes to m_tokens
-    m_tokens.push_back(new Token(type, text, literal , m_line));
+    std::shared_ptr<Token> temp(new Token(type, text, literal, m_line));
+    m_tokens.push_back(temp);
 }
 
 //print all tokens in m_tokens
 void Scanner::printTokens() const{
-    for (Token* it: m_tokens){
+    for (std::shared_ptr<Token> it: m_tokens){
         std::cout << "Token Type: " << it->getTypeString() << " |";
         std::cout << " Literal: " << it->getLiteralString() << " |";
         std::cout << " Lexeme: " << it->getLexeme() << std::endl;

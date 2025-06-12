@@ -2,7 +2,7 @@
 /*CONSTRUCTION OF TREE. Making sure grammar is good, and constructing
 AST out of all these tokens!*/
 
-Parser::Parser(std::vector<Token*> tokens){
+Parser::Parser(std::vector<std::shared_ptr<Token>> tokens){
     m_tokens = tokens;
 }
 
@@ -44,7 +44,7 @@ bool Parser::isAtEnd() const{
     return peek().m_type == TokenType::ENDOFFILE;
 }
 
-Expr* Parser::parse(){
+std::shared_ptr<Expr> Parser::parse(){
     try{
         return expression();
     } catch (ParseError error){
@@ -52,87 +52,87 @@ Expr* Parser::parse(){
     }
 }
 
-Expr* Parser::expression(){
+std::shared_ptr<Expr> Parser::expression(){
     return equality();
 }
 
-Expr* Parser::equality(){
+std::shared_ptr<Expr> Parser::equality(){
     //equality -> comparison( ("!=" | "==") comparison )*
     //comparison...
-    Expr* expr = comparison();
+    std::shared_ptr<Expr> expr = comparison();
 
     //...(("!="|"==")comparison)*
     while(match({TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL})){
         Token op = previous();
-        Expr* right = comparison(); //parsing the next (...)*
-        expr = new Binary(expr, op, right); //appending to expr
+        std::shared_ptr<Expr> right = comparison(); //parsing the next (...)*
+        expr = std::shared_ptr<Binary>(new Binary(expr, op, right)); //appending to expr
     }
 
     return expr;
 }
 
-Expr* Parser::comparison(){
+std::shared_ptr<Expr> Parser::comparison(){
     //comparison -> term( ( ">" | ">=" | "<" | "<=") term )*
-    Expr* expr = term();
+    std::shared_ptr<Expr> expr = term();
 
     while(match({TokenType::LESS, TokenType::LESS_EQUAL
         ,TokenType::GREATER, TokenType::GREATER_EQUAL})){
         Token op = previous();            
-        Expr* right = term();
-        expr = new Binary(expr, op, right);
+        std::shared_ptr<Expr> right = term();
+        expr = std::shared_ptr<Binary>(new Binary(expr, op, right));
     }
 
     return expr;
 }
 
-Expr* Parser::term(){
-    Expr* expr = factor();
+std::shared_ptr<Expr> Parser::term(){
+    std::shared_ptr<Expr> expr = factor();
 
     while(match({TokenType::PLUS, TokenType::MINUS})){
         Token op = previous();            
-        Expr* right = factor();
-        expr = new Binary(expr, op, right);
+        std::shared_ptr<Expr> right = factor();
+        expr = std::shared_ptr<Binary>(new Binary(expr, op, right));
     }
 
     return expr;
 }
 
-Expr* Parser::factor(){
-    Expr* expr = unary();
+std::shared_ptr<Expr> Parser::factor(){
+    std::shared_ptr<Expr> expr = unary();
 
     while(match({TokenType::STAR, TokenType::SLASH})){
         Token op = previous();            
-        Expr* right = unary();
-        expr = new Binary(expr, op, right);
+        std::shared_ptr<Expr> right = unary();
+        expr = std::shared_ptr<Binary>(new Binary(expr, op, right));
     }
 
     return expr;
 }
 
-Expr* Parser::unary(){
+std::shared_ptr<Expr> Parser::unary(){
     //unary -> ("!"|"-") unary | primary
     if (match({TokenType::MINUS, TokenType::BANG})){
         Token op = previous();
-        Expr* right = unary();
-        return new Unary(op, right);
+        std::shared_ptr<Expr> right = unary();
+        return std::shared_ptr<Unary>(new Unary(op, right));
     }
     return primary();
 }
 
-Expr* Parser::primary(){
-    if (match({TokenType::FALSE})) return new Literal(false);
-    if (match({TokenType::TRUE})) return new Literal(true);
+std::shared_ptr<Expr> Parser::primary(){
+    if (match({TokenType::FALSE})) return std::shared_ptr<Literal>(new Literal(false));
+    if (match({TokenType::TRUE})) return std::shared_ptr<Literal>(new Literal(true));
     //FIX: Might have to rework how null/nil works
-    if (match({TokenType::NIL})) return new Literal("NIL");
+    if (match({TokenType::NIL})) return std::shared_ptr<Literal>(new Literal("NIL"));
     if (match({TokenType::NUMBER, TokenType::STRING})){
-        return new Literal(previous().m_literal);
+        return std::shared_ptr<Literal>(new Literal(previous().m_literal));
     }
 
     //grouping case 
     if (match({TokenType::LEFT_PAREN})){
-        Expr* expr = expression();
+        std::shared_ptr<Expr> expr = expression();
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
-        return new Grouping(expr);
+        return std::shared_ptr<Grouping>(new Grouping(expr));
     }
 
     throw error(peek(), "Expect expression.");

@@ -1,7 +1,7 @@
 #include "ExpressionTypes.hpp"
 
 //constructors
-Binary::Binary(Expr* left, const Token& op, Expr* right){
+Binary::Binary(std::shared_ptr<Expr> left, const Token& op, std::shared_ptr<Expr> right){
         m_left = left;
         m_op = op;
         m_right = right;
@@ -11,12 +11,12 @@ Literal::Literal(const std::variant<bool, double, std::string>& lit){
     m_lit = lit;
 }
 
-Unary::Unary(const Token& logicalop, Expr* operand){
+Unary::Unary(const Token& logicalop, std::shared_ptr<Expr> operand){
         m_logicalop = logicalop;
         m_operand = operand;
     }
 
-Grouping::Grouping(Expr* contents){
+Grouping::Grouping(std::shared_ptr<Expr> contents){
         m_contents = contents;
     }
     
@@ -70,9 +70,9 @@ void AstVisitor::visit(Literal& literal){
 }
 
 //PARENTHESIZE
-void AstVisitor::parenthesize(const std::string& name, const std::vector<Expr*>& expr_list){
+void AstVisitor::parenthesize(const std::string& name, const std::vector<std::shared_ptr<Expr>>& expr_list){
     returns.push("(" + name);
-    for(Expr* expr: expr_list){
+    for(std::shared_ptr<Expr> expr: expr_list){
         returns.push(" ");
         expr->accept(*this);
     }   
@@ -80,7 +80,7 @@ void AstVisitor::parenthesize(const std::string& name, const std::vector<Expr*>&
 }
 
 //AstPrinter print
-void AstPrinter::print(Expr* expr){
+void AstPrinter::print(std::shared_ptr<Expr> expr){
     expr->accept(*this);
     std::string final = "";
     while (!returns.empty()){
