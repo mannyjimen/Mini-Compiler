@@ -15,10 +15,9 @@ Lox::Lox(int argc, char* argv[]){
 }
 
 void Lox::runPrompt(){
-    hadError = false;
-
     std::string line;
     for (;;){ //infinite loop
+        hadError = false;
         std::cout << "> "; 
         std::getline(std::cin, line);
         if (line.empty())
