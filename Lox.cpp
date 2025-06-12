@@ -15,6 +15,8 @@ Lox::Lox(int argc, char* argv[]){
 }
 
 void Lox::runPrompt(){
+    hadError = false;
+
     std::string line;
     for (;;){ //infinite loop
         std::cout << "> "; 
@@ -22,8 +24,7 @@ void Lox::runPrompt(){
         if (line.empty())
             break;
         run(line);
-
-        hadError = true; //if error in code, don't want interactive to stop
+        
     }
 }
 
@@ -54,7 +55,6 @@ void Lox::run(const std::string& source){
     if (hadError){
         return;
     }
-    //printer helper
     AstPrinter astprinter;
     astprinter.print(expression);
     //we are going to execute !!!
