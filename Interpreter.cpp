@@ -37,16 +37,23 @@ void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
     LoxObject right = evaluate(binary.m_right);
     //double dleft = std::get<double>(left); double dright = std::get<double>(right);
-    bool areBools, areDoubles;
+    bool areBools = false;
+    bool areDoubles = false;
+    bool areStrings = false;
     bool b_left, b_right;
     double d_left, d_right;
+    std::string s_left, s_right;
     if (std::get_if<bool>(&left) && std::get_if<bool>(&right)) areBools = true;
     if (std::get_if<double>(&left) && std::get_if<double>(&right)) areDoubles = true;
+    if (std::get_if<std::string>(&left) && std::get_if<std::string>(&right)) areStrings = true;
     if(areBools){
         b_left = std::get<bool>(left); b_right = std::get<bool>(right);
     }
     else if(areDoubles){
         d_left = std::get<double>(left); d_right = std::get<double>(right);
+    }
+    else if (areStrings){
+        s_left = std::get<std::string>(left); s_right = std::get<std::string>(right);
     }
 
     switch (binary.m_op.m_type){
@@ -57,8 +64,8 @@ void Interpreter::visit(Binary& binary){
         case TokenType::STAR:
             m_returns.push(d_left * d_right); return;
         case TokenType::PLUS:
-            if (std::get_if<std::string>(&left) && std::get_if<std::string>(&right)){
-                m_returns.push(std::get<std::string>(left) + std::get<std::string>(right)); return;
+            if (areStrings){
+                m_returns.push(s_left + s_right); return;
             }
             if (areDoubles){
                 m_returns.push(d_left + d_right); return;
@@ -73,17 +80,19 @@ void Interpreter::visit(Binary& binary){
         case TokenType::LESS_EQUAL:
             m_returns.push(d_left <= d_right); return;
         case TokenType::EQUAL_EQUAL:
-            m_returns.push(isEqual(left, right)); return;
+            m_returns.push(isEqual(left, right, areBools, areDoubles, areStrings)); return;
         case TokenType::BANG_EQUAL:
-            m_returns.push(!isEqual(left, right)); return;
+            m_returns.push(!isEqual(left, right, areBools, areDoubles, areStrings)); return;
     }
     m_returns.push("NIL"); return;
 } 
 
-bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b){
-    if (std::get_if<std::string>(&a) && std::get<std::string>(a) == "NIL"){
-        if (std::get_if<std::string>(&b) && std::get<std::string>(b) == "NIL") return true;
-        return false;
+bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b, bool areBools, bool areDoubles, bool areStrings){
+    if (areBools || areDoubles){
+        return a == b;
     }
-    return a == b;
+    if (areStrings){
+        if (std::get<std::string>(a) == "NIL" && std::get<std::string>(b) == "NIL") return true;
+    }
+    return false;
 }
