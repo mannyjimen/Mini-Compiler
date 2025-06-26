@@ -1,6 +1,6 @@
 #include "Token.hpp"
 
-Token::Token(TokenType type, const std::string& lexeme, std::variant<bool, double, std::string> literal, int line){
+Token::Token(TokenType type, const std::string& lexeme, LoxObject literal, int line){
     m_type = type;
     m_lexeme = lexeme;
     m_literal = literal;

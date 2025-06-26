@@ -19,7 +19,7 @@ void Interpreter::visit(Unary& unary){
             m_returns.push(!isTruthy(right));
             return;
     }
-    m_returns.push("NIL");
+    m_returns.push(nullptr);
 }
 
 LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
@@ -28,15 +28,13 @@ LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
 
 bool Interpreter::isTruthy(const LoxObject& obj){
     if (std::get_if<bool>(&obj)) return std::get<bool>(obj);
-    else if (std::get_if<std::string>(&obj) && std::get<std::string>(obj) == "NIL") return false; 
-    
+    else if (std::get_if<std::monostate>(&obj)) return false; 
     return true;
 }
 
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
     LoxObject right = evaluate(binary.m_right);
-    //double dleft = std::get<double>(left); double dright = std::get<double>(right);
     bool areBools = false;
     bool areDoubles = false;
     bool areStrings = false;
@@ -84,7 +82,7 @@ void Interpreter::visit(Binary& binary){
         case TokenType::BANG_EQUAL:
             m_returns.push(!isEqual(left, right, areBools, areDoubles, areStrings)); return;
     }
-    m_returns.push("NIL"); return;
+    m_returns.push(nullptr); return;
 } 
 
 bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b, bool areBools, bool areDoubles, bool areStrings){
@@ -92,7 +90,7 @@ bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b, bool areBools,
         return a == b;
     }
     if (areStrings){
-        if (std::get<std::string>(a) == "NIL" && std::get<std::string>(b) == "NIL") return true;
+        if (std::get<std::nullptr_t>(a) == nullptr && std::get<std::nullptr_t>(b) == nullptr) return true;
     }
     return false;
 }

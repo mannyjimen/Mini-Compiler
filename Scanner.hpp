@@ -67,7 +67,7 @@ public:
     
     //addTokens
     void addToken(TokenType type);
-    void addToken(TokenType type, std::variant<bool, double, std::string> literal);
+    void addToken(TokenType type, LoxObject literal);
 
     //checks if scanner is at end of source
     bool isAtEnd() const;

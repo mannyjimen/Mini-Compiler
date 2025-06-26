@@ -4,6 +4,8 @@
 #include <string>
 #include <variant>
 
+using LoxObject = std::variant<std::monostate, bool, double, std::string>;
+
 enum class TokenType{
     //single-char tokens
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
@@ -26,7 +28,7 @@ enum class TokenType{
 class Token{
     public:
     //parameterized constructor for token
-    Token(TokenType type, const std::string& lexeme, std::variant<bool, double, std::string> literal, int line);
+    Token(TokenType type, const std::string& lexeme, LoxObject literal, int line);
     //convert token to string
     std::string toString() const;
     //converts token type to string (helper for toString)
@@ -38,7 +40,7 @@ class Token{
 
     TokenType m_type;
     std::string m_lexeme;
-    std::variant<bool, double, std::string> m_literal;
+    LoxObject m_literal;
     int m_line;
 };
 

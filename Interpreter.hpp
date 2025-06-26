@@ -6,8 +6,6 @@
 #include <memory>
 #include <stack>
 
-using LoxObject = std::variant<bool, double, std::string>;
-
 class Interpreter: public Visitor{
     public:
     std::stack<LoxObject> m_returns;

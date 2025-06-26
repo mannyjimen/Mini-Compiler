@@ -7,7 +7,7 @@ Binary::Binary(std::shared_ptr<Expr> left, const Token& op, std::shared_ptr<Expr
         m_right = right;
 }
 
-Literal::Literal(const std::variant<bool, double, std::string>& lit){
+Literal::Literal(const LoxObject& lit){
     m_lit = lit;
 }
 

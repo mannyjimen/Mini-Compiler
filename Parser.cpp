@@ -123,7 +123,8 @@ std::shared_ptr<Expr> Parser::primary(){
     if (match({TokenType::FALSE})) return std::shared_ptr<Literal>(new Literal(false));
     if (match({TokenType::TRUE})) return std::shared_ptr<Literal>(new Literal(true));
     //FIX: Might have to rework how null/nil works
-    if (match({TokenType::NIL})) return std::shared_ptr<Literal>(new Literal("NIL"));
+    std::monostate nullObj;
+    if (match({TokenType::NIL})) return std::shared_ptr<Literal>(new Literal(nullObj));
     if (match({TokenType::NUMBER, TokenType::STRING})){
         return std::shared_ptr<Literal>(new Literal(previous().m_literal));
     }

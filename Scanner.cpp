@@ -224,7 +224,7 @@ void Scanner::addToken(TokenType type){
 }
 
 //adding token with literal
-void Scanner::addToken(TokenType type, std::variant<bool, double, std::string> literal){
+void Scanner::addToken(TokenType type, LoxObject literal){
     //retrieving lexeme
     std::string text = m_source.substr(m_start, m_current - m_start);
     //pushing token with attributes to m_tokens

@@ -13,6 +13,7 @@
 #include <iostream>
 #include <memory>
 
+
 class Binary;
 class Literal;
 class Unary;
@@ -63,9 +64,9 @@ struct Binary : public Expr{
 };
 
 struct Literal : public Expr{
-    Literal(const std::variant<bool, double, std::string>& lit);
+    Literal(const LoxObject& lit);
 
-    std::variant<bool, double, std::string> m_lit;
+    LoxObject m_lit;
 
     void accept(Visitor& visitor) override;
 };
