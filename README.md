@@ -4,7 +4,7 @@ Following through Bob Nystrom's book Crafting Interpreters <https://craftinginte
 
 ### Sections
 ☑️ Scanner
-:x: Parser
+☑️ Parser
 
 ### Additional features
 Features want to, or have implemented. Not shown in the book.
