@@ -1,5 +1,5 @@
-// for null objects, maybe create a separate null 
-// object that represents null (cant use nullptr or NULL)
+#ifndef _INTERPRETER_
+#define _INTERPRETER_
 
 #include "ExpressionTypes.hpp"
 #include <variant>
@@ -19,3 +19,5 @@ class Interpreter: public Visitor{
     void visit(Unary& unary) override;
     void visit(Binary& binary) override;
 };
+
+#endif

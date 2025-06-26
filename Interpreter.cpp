@@ -19,7 +19,8 @@ void Interpreter::visit(Unary& unary){
             m_returns.push(!isTruthy(right));
             return;
     }
-    m_returns.push(nullptr);
+    std::monostate nullObj;
+    m_returns.push(nullObj);
 }
 
 LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
@@ -82,15 +83,14 @@ void Interpreter::visit(Binary& binary){
         case TokenType::BANG_EQUAL:
             m_returns.push(!isEqual(left, right, areBools, areDoubles, areStrings)); return;
     }
-    m_returns.push(nullptr); return;
+    std::monostate nullObj;
+    m_returns.push(nullObj); return;
 } 
 
 bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b, bool areBools, bool areDoubles, bool areStrings){
     if (areBools || areDoubles){
         return a == b;
     }
-    if (areStrings){
-        if (std::get<std::nullptr_t>(a) == nullptr && std::get<std::nullptr_t>(b) == nullptr) return true;
-    }
+    if (std::get_if<std::monostate>(&a) && std::get_if<std::monostate>(&b)) return true;
     return false;
 }
