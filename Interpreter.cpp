@@ -1,5 +1,9 @@
 #include "Interpreter.hpp"
 
+LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
+    : std::runtime_error(message), m_token(token) {}
+
+
 void Interpreter::visit(Literal& literal){
     m_returns.push(literal.m_lit);
 }
@@ -13,6 +17,7 @@ void Interpreter::visit(Unary& unary){
 
     switch (unary.m_logicalop.m_type){
         case TokenType::MINUS : 
+            checkNumberOperand(unary.m_logicalop, right);
             m_returns.push(-(std::get<double>(right)));
             return;
         case TokenType::BANG :
@@ -27,13 +32,16 @@ void Interpreter::visit(Unary& unary){
 //this is where I need to return (use stack) a value
 LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
     expr->accept(*this);
+    LoxObject ret = m_returns.top();
+    m_returns.pop();
+    return ret;
 }
 
 bool Interpreter::isTruthy(const LoxObject& obj){
     if (std::get_if<bool>(&obj)) return std::get<bool>(obj);
     else if (std::get_if<std::monostate>(&obj)) return false; 
     return true;
-}
+} 
 
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
@@ -58,13 +66,16 @@ void Interpreter::visit(Binary& binary){
     }
 
     //FIX
-    //if adding strings, error will occur if other operator is used (not by us)
+    //if adding strings, error will occur if operator other than + is used
     switch (binary.m_op.m_type){
         case TokenType::MINUS:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left - d_right); return;
         case TokenType::SLASH:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left / d_right); return;
         case TokenType::STAR:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left * d_right); return;
         case TokenType::PLUS:
             if (areStrings){
@@ -73,28 +84,41 @@ void Interpreter::visit(Binary& binary){
             if (areDoubles){
                 m_returns.push(d_left + d_right); return;
             }
-            break;
+            throw LoxRuntimeError(binary.m_op, "Operands must be both numbers or both strings.");
         case TokenType::GREATER:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left > d_right); return;
         case TokenType::GREATER_EQUAL:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left >= d_right); return;
         case TokenType::LESS:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left < d_right); return;
         case TokenType::LESS_EQUAL:
+            checkNumberOperands(binary.m_op, left, right);
             m_returns.push(d_left <= d_right); return;
         case TokenType::EQUAL_EQUAL:
-            m_returns.push(isEqual(left, right, areBools, areDoubles, areStrings)); return;
+            m_returns.push(isEqual(left, right)); return;
         case TokenType::BANG_EQUAL:
-            m_returns.push(!isEqual(left, right, areBools, areDoubles, areStrings)); return;
+            m_returns.push(!isEqual(left, right)); return;
     }
     std::monostate nullObj;
     m_returns.push(nullObj); return;
 } 
 
-bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b, bool areBools, bool areDoubles, bool areStrings){
-    if (areBools || areDoubles){
-        return a == b;
-    }
+bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b){
     if (std::get_if<std::monostate>(&a) && std::get_if<std::monostate>(&b)) return true;
-    return false;
+    if (std::get_if<std::monostate>(&a)) return false;
+    return a == b;
+}
+
+//checking for unexpected data type (unary minus op)
+void Interpreter::checkNumberOperand(const Token& op, const LoxObject& operand){
+    if (std::get_if<double>(&operand)) return;
+    throw LoxRuntimeError(op, "Operand must be a number.");
+}
+
+void Interpreter::checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right){
+    if (std::get_if<double>(&left) && std::get_if<double>(&right)) return;
+    throw LoxRuntimeError(op, "Operands must both be numbers.");
 }

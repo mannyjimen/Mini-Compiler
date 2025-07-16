@@ -5,14 +5,22 @@
 #include <variant>
 #include <memory>
 #include <stack>
+#include <stdexcept>
+
+struct LoxRuntimeError : public std::runtime_error{
+    Token m_token;
+
+    LoxRuntimeError(const Token& token, const std::string& message);
+};
 
 //POST-ORDER Traversal!
-
 class Interpreter: public Visitor{
     public:
+
+    private:
     std::stack<LoxObject> m_returns;
     bool isTruthy(const LoxObject& obj);
-    bool isEqual(const LoxObject& a, const LoxObject& b, bool areBools, bool areDoubles, bool areStrings);
+    bool isEqual(const LoxObject& a, const LoxObject& b);
 
     LoxObject evaluate(std::shared_ptr<Expr> expr);
 
@@ -20,6 +28,9 @@ class Interpreter: public Visitor{
     void visit(Grouping& grouping) override;
     void visit(Unary& unary) override;
     void visit(Binary& binary) override;
+
+    void checkNumberOperand(const Token& op, const LoxObject& operand);
+    void checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right);
 };
 
 #endif
