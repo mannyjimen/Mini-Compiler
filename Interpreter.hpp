@@ -6,6 +6,8 @@
 #include <memory>
 #include <stack>
 
+//POST-ORDER Traversal!
+
 class Interpreter: public Visitor{
     public:
     std::stack<LoxObject> m_returns;

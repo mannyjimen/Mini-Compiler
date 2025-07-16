@@ -23,6 +23,8 @@ void Interpreter::visit(Unary& unary){
     m_returns.push(nullObj);
 }
 
+//FIX
+//this is where I need to return (use stack) a value
 LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
     expr->accept(*this);
 }
@@ -55,6 +57,8 @@ void Interpreter::visit(Binary& binary){
         s_left = std::get<std::string>(left); s_right = std::get<std::string>(right);
     }
 
+    //FIX
+    //if adding strings, error will occur if other operator is used (not by us)
     switch (binary.m_op.m_type){
         case TokenType::MINUS:
             m_returns.push(d_left - d_right); return;
