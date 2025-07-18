@@ -5,8 +5,6 @@
 #include "Scanner.hpp"
 #include "ExpressionTypes.hpp"
 #include "Parser.hpp"
-#include "Interpreter.hpp"
-
 
 #include <fstream>
 #include <iostream>
@@ -16,9 +14,13 @@
 static bool hadError = false;
 static bool hadRuntimeError = false;
 
+class Interpreter;
+class LoxRuntimeError;
+
 class Lox{
 
     public:
+    //interpreter declaration
     static Interpreter interpreter;
     //constructor
     Lox(int argc, char* argv[]);

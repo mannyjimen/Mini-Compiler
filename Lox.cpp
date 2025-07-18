@@ -1,4 +1,8 @@
 #include "Lox.hpp"
+#include "Interpreter.hpp"
+
+//interpreter definition (NEEDED)
+Interpreter Lox::interpreter;
 
 Lox::Lox(int argc, char* argv[]){
     //learn about exceptions throw catch
@@ -81,7 +85,7 @@ void Lox::error(Token token, const std::string& errorMessage){
 }
 
 void Lox::runtimeError(LoxRuntimeError error){
-    std::cout << error.what() << "\n[line " + error.m_token.m_line << "]";
+    std::cerr << error.what() << " [line " << error.m_token.m_line << "]\n";
     hadRuntimeError = true;
 }
 
