@@ -42,6 +42,12 @@ void Lox::runFile(const std::string& sourceFileName){
     }
     run(entireProg);
 
+    //Unix/POSIX Convention for exit codes (shell etiquette)
+
+    //data format error
+    if (hadError) std::exit(65);
+    //internal software error
+    if (hadRuntimeError) std::exit(70);
     sourceFile.close();
 }
 
@@ -54,8 +60,10 @@ void Lox::run(const std::string& source){
     if (hadError){
         return;
     }
-    AstPrinter astprinter;
-    astprinter.print(expression);
+    // AstPrinter astprinter;
+    // astprinter.print(expression);
+    
+    interpreter.interpret(expression);
     //we are going to execute !!!
 }
 
@@ -70,6 +78,11 @@ void Lox::error(Token token, const std::string& errorMessage){
     else {
         report(token.m_line, " at '" + token.m_lexeme + "'", errorMessage);
     }
+}
+
+void Lox::runtimeError(LoxRuntimeError error){
+    std::cout << error.what() << "\n[line " + error.m_token.m_line << "]";
+    hadRuntimeError = true;
 }
 
 void Lox::report(int lineNum, const std::string& where, const std::string& message){
