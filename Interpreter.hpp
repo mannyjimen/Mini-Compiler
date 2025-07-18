@@ -2,6 +2,8 @@
 #define _INTERPRETER_
 
 #include "ExpressionTypes.hpp"
+#include "Lox.hpp"
+
 #include <variant>
 #include <memory>
 #include <stack>
@@ -16,11 +18,13 @@ struct LoxRuntimeError : public std::runtime_error{
 //POST-ORDER Traversal!
 class Interpreter: public Visitor{
     public:
+    void interpret(std::shared_ptr<Expr> expr);
 
     private:
     std::stack<LoxObject> m_returns;
     bool isTruthy(const LoxObject& obj);
     bool isEqual(const LoxObject& a, const LoxObject& b);
+    std::string stringify(const LoxObject& obj);
 
     LoxObject evaluate(std::shared_ptr<Expr> expr);
 

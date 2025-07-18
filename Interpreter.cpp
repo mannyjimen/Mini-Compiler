@@ -12,6 +12,34 @@ void Interpreter::visit(Grouping& grouping){
     evaluate(grouping.m_contents);
 }
 
+void Interpreter::interpret(std::shared_ptr<Expr> expr){
+    try{
+        LoxObject result = evaluate(expr);
+        std::cout << stringify(result) << std::endl;
+    } catch (LoxRuntimeError error){
+        Lox::runtimeError(error);
+    }
+}
+
+std::string Interpreter::stringify(const LoxObject& obj){
+    if (std::get_if<std::monostate>(&obj)) return "nil";
+    else if (std::get_if<bool>(&obj)){
+        switch (std::get<bool>(obj)){
+            case true:
+                return "true";
+            default:
+                return "false";
+        }
+    }
+    else if (std::get_if<double>(&obj)){
+        std::string sdouble = std::to_string(std::get<double>(obj));
+        return sdouble;
+        //FIX
+        //if sdouble ends in ".0", only return integer value.
+    }
+    return std::get<std::string>(obj);
+}
+
 void Interpreter::visit(Unary& unary){
     LoxObject right = evaluate(unary.m_operand);
 
@@ -118,6 +146,7 @@ void Interpreter::checkNumberOperand(const Token& op, const LoxObject& operand){
     throw LoxRuntimeError(op, "Operand must be a number.");
 }
 
+//checking for unexpected data type (binary, excluding '+')
 void Interpreter::checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right){
     if (std::get_if<double>(&left) && std::get_if<double>(&right)) return;
     throw LoxRuntimeError(op, "Operands must both be numbers.");
