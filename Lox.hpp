@@ -3,7 +3,7 @@
 
 #include "Token.hpp"
 #include "Scanner.hpp"
-#include "ExpressionTypes.hpp"
+#include "Expression.hpp"
 #include "Parser.hpp"
 
 #include <fstream>

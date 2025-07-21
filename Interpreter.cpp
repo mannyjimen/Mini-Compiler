@@ -3,14 +3,8 @@
 LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
     : std::runtime_error(message), m_token(token) {}
 
-
-void Interpreter::visit(Literal& literal){
-    m_returns.push(literal.m_lit);
-}
-
-void Interpreter::visit(Grouping& grouping){
-    m_returns.push(evaluate(grouping.m_contents));
-}
+    
+//Interpreter function implementations
 
 void Interpreter::interpret(std::shared_ptr<Expr> expr){
     try{
@@ -21,23 +15,17 @@ void Interpreter::interpret(std::shared_ptr<Expr> expr){
     }
 }
 
-std::string Interpreter::stringify(const LoxObject& obj){
-    if (std::get_if<std::monostate>(&obj)) return "nil";
-    else if (std::get_if<bool>(&obj)){
-        switch (std::get<bool>(obj)){
-            case true:
-                return "true";
-            default:
-                return "false";
-        }
-    }
-    else if (std::get_if<double>(&obj)){
-        std::string sdouble = std::to_string(std::get<double>(obj));
-        return sdouble;
-        //FIX
-        //if sdouble ends in ".0", only return integer value.
-    }
-    return std::get<std::string>(obj);
+//FIX
+//this is where I need to return (use stack) a value
+LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
+    expr->accept(*this);
+    LoxObject ret = m_returns.top();
+    m_returns.pop();
+    return ret;
+}
+
+void Interpreter::visit(Literal& literal){
+    m_returns.push(literal.m_lit);
 }
 
 void Interpreter::visit(Unary& unary){
@@ -56,20 +44,9 @@ void Interpreter::visit(Unary& unary){
     m_returns.push(nullObj);
 }
 
-//FIX
-//this is where I need to return (use stack) a value
-LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
-    expr->accept(*this);
-    LoxObject ret = m_returns.top();
-    m_returns.pop();
-    return ret;
+void Interpreter::visit(Grouping& grouping){
+    m_returns.push(evaluate(grouping.m_contents));
 }
-
-bool Interpreter::isTruthy(const LoxObject& obj){
-    if (std::get_if<bool>(&obj)) return std::get<bool>(obj);
-    else if (std::get_if<std::monostate>(&obj)) return false; 
-    return true;
-} 
 
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
@@ -132,6 +109,31 @@ void Interpreter::visit(Binary& binary){
     }
     std::monostate nullObj;
     m_returns.push(nullObj); return;
+} 
+
+std::string Interpreter::stringify(const LoxObject& obj){
+    if (std::get_if<std::monostate>(&obj)) return "nil";
+    else if (std::get_if<bool>(&obj)){
+        switch (std::get<bool>(obj)){
+            case true:
+                return "true";
+            default:
+                return "false";
+        }
+    }
+    else if (std::get_if<double>(&obj)){
+        std::string sdouble = std::to_string(std::get<double>(obj));
+        return sdouble;
+        //FIX
+        //if sdouble ends in ".0", only return integer value.
+    }
+    return std::get<std::string>(obj);
+}
+
+bool Interpreter::isTruthy(const LoxObject& obj){
+    if (std::get_if<bool>(&obj)) return std::get<bool>(obj);
+    else if (std::get_if<std::monostate>(&obj)) return false; 
+    return true;
 } 
 
 bool Interpreter::isEqual(const LoxObject& a, const LoxObject& b){

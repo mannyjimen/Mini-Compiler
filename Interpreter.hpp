@@ -1,7 +1,7 @@
 #ifndef _INTERPRETER_
 #define _INTERPRETER_
 
-#include "ExpressionTypes.hpp"
+#include "Expression.hpp"
 #include "Lox.hpp"
 
 #include <variant>

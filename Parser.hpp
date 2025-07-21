@@ -1,7 +1,7 @@
 #ifndef _PARSER_
 #define _PARSER_
 
-#include "ExpressionTypes.hpp"
+#include "Expression.hpp"
 #include "Lox.hpp"
 
 #include <vector>
