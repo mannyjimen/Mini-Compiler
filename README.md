@@ -5,6 +5,7 @@ Following through Bob Nystrom's book Crafting Interpreters <https://craftinginte
 ### Sections
 ☑️ Scanner
 ☑️ Parser
+☑️ AST Interpreter
 
 ### Additional features
 Features want to, or have implemented. Not shown in the book.
