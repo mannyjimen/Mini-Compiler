@@ -9,7 +9,7 @@ void Interpreter::visit(Literal& literal){
 }
 
 void Interpreter::visit(Grouping& grouping){
-    evaluate(grouping.m_contents);
+    m_returns.push(evaluate(grouping.m_contents));
 }
 
 void Interpreter::interpret(std::shared_ptr<Expr> expr){
