@@ -21,20 +21,20 @@ Grouping::Grouping(std::shared_ptr<Expr> contents){
     }
     
 //accept implemenatations
-void Binary::accept(Visitor& visitor){
+void Binary::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
-void Literal::accept(Visitor& visitor){
+void Literal::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
-void Unary::accept(Visitor& visitor){
+void Unary::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
-void Grouping::accept(Visitor& visitor){
+void Grouping::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
    
-//AST Visitor Implementations
+//AST ExprVisitor Implementations
 void AstVisitor::visit(Binary& binary){
     parenthesize(binary.m_op.getLexeme(), {binary.m_left, binary.m_right});
 }

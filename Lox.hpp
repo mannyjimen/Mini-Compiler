@@ -4,7 +4,9 @@
 #include "Token.hpp"
 #include "Scanner.hpp"
 #include "Expression.hpp"
+#include "Statement.hpp"
 #include "Parser.hpp"
+#include "Interpreter.hpp"
 
 #include <fstream>
 #include <iostream>

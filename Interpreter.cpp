@@ -6,10 +6,10 @@ LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
     
 //Interpreter function implementations
 
-void Interpreter::interpret(std::shared_ptr<Expr> expr){
+void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     try{
-        LoxObject result = evaluate(expr);
-        std::cout << stringify(result) << std::endl;
+        for (std::shared_ptr<Stmt> stmt : statements)
+            execute(stmt);
     } catch (LoxRuntimeError error){
         Lox::runtimeError(error);
     }
@@ -22,6 +22,10 @@ LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
     LoxObject ret = m_returns.top();
     m_returns.pop();
     return ret;
+}
+
+void Interpreter::execute(std::shared_ptr<Stmt> stmt){
+    stmt->accept(*this);
 }
 
 void Interpreter::visit(Literal& literal){
@@ -110,6 +114,18 @@ void Interpreter::visit(Binary& binary){
     std::monostate nullObj;
     m_returns.push(nullObj); return;
 } 
+
+//Statement Implementation Functions
+void Interpreter::visit(Expression& stmt){
+    evaluate(stmt.m_expr);
+}
+
+void Interpreter::visit(Print& stmt){
+    LoxObject value = evaluate(stmt.m_expr);
+    std::cout << stringify(value) << std::endl;
+}
+
+//helper funcs
 
 std::string Interpreter::stringify(const LoxObject& obj){
     if (std::get_if<std::monostate>(&obj)) return "nil";

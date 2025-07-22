@@ -59,7 +59,7 @@ void Lox::run(const std::string& source){
     Scanner scanner(source);
     std::vector<std::shared_ptr<Token>> tokens = scanner.scanTokens();
     Parser parser(tokens);
-    std::shared_ptr<Expr> expression = parser.parse();
+    std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
     //check if theres error in code
     if (hadError){
         return;
@@ -67,7 +67,7 @@ void Lox::run(const std::string& source){
     // AstPrinter astprinter;
     // astprinter.print(expression);
     
-    interpreter.interpret(expression);
+    interpreter.interpret(statements);
     //we are going to execute !!!
 }
 

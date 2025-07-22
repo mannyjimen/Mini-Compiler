@@ -2,6 +2,7 @@
 #define _PARSER_
 
 #include "Expression.hpp"
+#include "Statement.hpp"
 #include "Lox.hpp"
 
 #include <vector>
@@ -15,7 +16,7 @@ class Parser{
 public:
     Parser(const std::vector<std::shared_ptr<Token>> tokens);
     //initial, main method
-    std::shared_ptr<Expr> parse();
+    std::vector<std::shared_ptr<Stmt>> parse();
 
 private:
     std::vector<std::shared_ptr<Token>>  m_tokens;
@@ -43,6 +44,10 @@ private:
     std::shared_ptr<Expr> unary();
     std::shared_ptr<Expr> primary();
 
+    std::shared_ptr<Stmt> statement();
+    std::shared_ptr<Stmt> expressionStatement();
+    std::shared_ptr<Stmt> printStatement();
+    
     //error functions
     static ParseError error(const Token& token, const std::string& message);
     void synchronize();

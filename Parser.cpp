@@ -44,14 +44,23 @@ bool Parser::isAtEnd() const{
     return peek().m_type == TokenType::ENDOFFILE;
 }
 
-std::shared_ptr<Expr> Parser::parse(){
-    try{
-        return expression();
-    } catch (ParseError error){
-        return nullptr;
+std::vector<std::shared_ptr<Stmt>> Parser::parse(){
+    //old code pre-statement implementation
+    // try{
+    //     return expression();
+    // } catch (ParseError error){
+    //     return nullptr;
+    // }
+    
+    std::vector<std::shared_ptr<Stmt>> statements;
+    while (!isAtEnd()){
+        statements.push_back(statement());
     }
+    return statements;
 }
 
+
+//Expression parsing implementations
 std::shared_ptr<Expr> Parser::expression(){
     return equality();
 }
@@ -122,7 +131,7 @@ std::shared_ptr<Expr> Parser::unary(){
 std::shared_ptr<Expr> Parser::primary(){
     if (match({TokenType::FALSE})) return std::shared_ptr<Literal>(new Literal(false));
     if (match({TokenType::TRUE})) return std::shared_ptr<Literal>(new Literal(true));
-    //FIX: Might have to rework how null/nil works
+    //FIX DONE: Might have to rework how null/nil works
     std::monostate nullObj;
     if (match({TokenType::NIL})) return std::shared_ptr<Literal>(new Literal(nullObj));
     if (match({TokenType::NUMBER, TokenType::STRING})){
@@ -138,6 +147,27 @@ std::shared_ptr<Expr> Parser::primary(){
 
     throw error(peek(), "Expect expression.");
 }
+
+//Statement parsing implementations
+
+std::shared_ptr<Stmt> Parser::statement(){
+    if (match({TokenType::PRINT})) return printStatement();
+    return expressionStatement();
+}
+
+std::shared_ptr<Stmt> Parser::expressionStatement(){
+    std::shared_ptr<Expr> expr = expression();
+    consume(TokenType::SEMICOLON, "Expected a ';' after expression.");
+    return std::make_shared<Expression>(expr);
+}
+
+std::shared_ptr<Stmt> Parser::printStatement(){
+    //we matched and consumed Print token already.
+    std::shared_ptr<Expr> value = expression();
+    consume(TokenType::SEMICOLON, "Expected a ';' after value");
+    return std::make_shared<Print>(value);
+}
+
 
 //Error function implementations
 

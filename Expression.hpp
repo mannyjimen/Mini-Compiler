@@ -21,7 +21,7 @@ class Grouping;
 class Expr;
 
 //Visitor interface / abstract class
-class Visitor{
+class ExprVisitor{
 public:
     virtual void visit(Binary& binary) = 0;
     virtual void visit(Literal& literal) = 0;
@@ -30,7 +30,7 @@ public:
 };
 
 //visitor for printing AST of expresssion / Concrete
-class AstVisitor : public Visitor {
+class AstVisitor : public ExprVisitor {
 public:
     void visit(Binary& binary) override;
     void visit(Literal& literal) override;
@@ -50,7 +50,7 @@ public:
 //Expr interface / abstract class
 class Expr{
 public: 
-    virtual void accept(Visitor& visitor) = 0;
+    virtual void accept(ExprVisitor& visitor) = 0;
 };
 
 struct Binary : public Expr{
@@ -60,7 +60,7 @@ struct Binary : public Expr{
     Token m_op = Token(TokenType::NIL, "NIL", "NIL", 0);
     std::shared_ptr<Expr> m_right;
 
-    void accept(Visitor& visitor) override;
+    void accept(ExprVisitor& visitor) override;
 };
 
 struct Literal : public Expr{
@@ -68,7 +68,7 @@ struct Literal : public Expr{
 
     LoxObject m_lit;
 
-    void accept(Visitor& visitor) override;
+    void accept(ExprVisitor& visitor) override;
 };
 
 struct Unary : public Expr{
@@ -77,7 +77,7 @@ struct Unary : public Expr{
     Token m_logicalop = Token(TokenType::NIL, "NIL", "NIL", 0);
     std::shared_ptr<Expr> m_operand;
 
-    void accept(Visitor& visitor) override;
+    void accept(ExprVisitor& visitor) override;
     
 };
 
@@ -85,7 +85,7 @@ struct Grouping : public Expr{
     Grouping(std::shared_ptr<Expr> contents);
     std::shared_ptr<Expr> m_contents;
 
-    void accept(Visitor& visitor) override;
+    void accept(ExprVisitor& visitor) override;
 };
 
 #endif
