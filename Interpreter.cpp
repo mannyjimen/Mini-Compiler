@@ -139,9 +139,13 @@ std::string Interpreter::stringify(const LoxObject& obj){
     }
     else if (std::get_if<double>(&obj)){
         std::string sdouble = std::to_string(std::get<double>(obj));
+        int r = sdouble.size() - 1;
+        while (sdouble[r] == '0') r--;
+        if (sdouble[r] == '.') r--;
+        sdouble = sdouble.substr(0, r + 1);
         return sdouble;
         //FIX
-        //if sdouble ends in ".0", only return integer value.
+        //remove trailing zeros from double.
     }
     return std::get<std::string>(obj);
 }
