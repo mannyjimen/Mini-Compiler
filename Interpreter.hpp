@@ -36,10 +36,12 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
     void visit(Grouping& grouping) override;
     void visit(Unary& unary) override;
     void visit(Binary& binary) override;
+    void visit(Variable& variable) override;
 
     //Statement interpreter implementations
     void visit(Expression& stmt) override;
     void visit(Print& stmt) override;
+    void visit(Var& var) override;
 
     void checkNumberOperand(const Token& op, const LoxObject& operand);
     void checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right);

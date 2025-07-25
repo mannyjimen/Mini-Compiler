@@ -44,6 +44,8 @@ private:
     std::shared_ptr<Expr> unary();
     std::shared_ptr<Expr> primary();
 
+    std::shared_ptr<Stmt> declaration();
+    std::shared_ptr<Stmt> declVar();
     std::shared_ptr<Stmt> statement();
     std::shared_ptr<Stmt> expressionStatement();
     std::shared_ptr<Stmt> printStatement();

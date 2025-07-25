@@ -18,6 +18,7 @@ class Binary;
 class Literal;
 class Unary;
 class Grouping;
+class Variable;
 class Expr;
 
 //Visitor interface / abstract class
@@ -27,6 +28,7 @@ public:
     virtual void visit(Literal& literal) = 0;
     virtual void visit(Unary& unary) = 0;
     virtual void visit(Grouping& grouping) = 0;
+    virtual void visit(Variable& variable) = 0;
 };
 
 //visitor for printing AST of expresssion / Concrete
@@ -84,6 +86,14 @@ struct Unary : public Expr{
 struct Grouping : public Expr{
     Grouping(std::shared_ptr<Expr> contents);
     std::shared_ptr<Expr> m_contents;
+
+    void accept(ExprVisitor& visitor) override;
+};
+
+//accessing var
+struct Variable : public Expr{
+    Variable(const Token& tokenName);
+    Token m_tokenName;
 
     void accept(ExprVisitor& visitor) override;
 };

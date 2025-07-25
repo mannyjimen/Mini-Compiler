@@ -52,6 +52,10 @@ void Interpreter::visit(Grouping& grouping){
     m_returns.push(evaluate(grouping.m_contents));
 }
 
+void Interpreter::visit(Variable& variable){
+    
+}
+
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
     LoxObject right = evaluate(binary.m_right);
@@ -125,6 +129,10 @@ void Interpreter::visit(Print& stmt){
     std::cout << stringify(value) << std::endl;
 }
 
+void Interpreter::visit(Var& stmt){
+
+}
+
 //helper funcs
 
 std::string Interpreter::stringify(const LoxObject& obj){
@@ -144,7 +152,7 @@ std::string Interpreter::stringify(const LoxObject& obj){
         if (sdouble[r] == '.') r--;
         sdouble = sdouble.substr(0, r + 1);
         return sdouble;
-        //FIX
+        //FIX-DONE
         //remove trailing zeros from double.
     }
     return std::get<std::string>(obj);

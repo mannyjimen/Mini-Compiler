@@ -13,3 +13,11 @@ Print::Print(std::shared_ptr<Expr> expr){
 void Print::accept(StmtVisitor& visitor){
     visitor.visit(*this);
 }
+
+Var::Var(const Token& token, std::shared_ptr<Expr> expr): m_token{token} {
+    m_exprInit = expr;
+}
+
+void Var::accept(StmtVisitor& visitor){
+    visitor.visit(*this);
+}

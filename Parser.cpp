@@ -6,6 +6,21 @@ Parser::Parser(std::vector<std::shared_ptr<Token>> tokens){
     m_tokens = tokens;
 }
 
+std::vector<std::shared_ptr<Stmt>> Parser::parse(){
+    //old code pre-statement implementation
+    // try{
+    //     return expression();
+    // } catch (ParseError error){
+    //     return nullptr;
+    // }
+    
+    std::vector<std::shared_ptr<Stmt>> statements;
+    while (!isAtEnd()){
+        statements.push_back(declaration());
+    }
+    return statements;
+}
+
 bool Parser::match(const std::vector<TokenType> types){
     for (const TokenType& type: types){
         if (check(type)){
@@ -43,22 +58,6 @@ Token Parser::previous() const{
 bool Parser::isAtEnd() const{
     return peek().m_type == TokenType::ENDOFFILE;
 }
-
-std::vector<std::shared_ptr<Stmt>> Parser::parse(){
-    //old code pre-statement implementation
-    // try{
-    //     return expression();
-    // } catch (ParseError error){
-    //     return nullptr;
-    // }
-    
-    std::vector<std::shared_ptr<Stmt>> statements;
-    while (!isAtEnd()){
-        statements.push_back(statement());
-    }
-    return statements;
-}
-
 
 //Expression parsing implementations
 std::shared_ptr<Expr> Parser::expression(){
@@ -138,6 +137,7 @@ std::shared_ptr<Expr> Parser::primary(){
         return std::shared_ptr<Literal>(new Literal(previous().m_literal));
     }
 
+    if (match({TokenType::IDENTIFIER})) return std::shared_ptr<Variable>(new Variable(previous()));
     //grouping case 
     if (match({TokenType::LEFT_PAREN})){
         std::shared_ptr<Expr> expr = expression();
@@ -149,6 +149,28 @@ std::shared_ptr<Expr> Parser::primary(){
 }
 
 //Statement parsing implementations
+
+//error recovery is here (catching ParseError for synchronization)
+std::shared_ptr<Stmt> Parser::declaration(){
+    try{
+        if (match({TokenType::VAR})) return declVar();
+        return statement();
+    } catch(ParseError error){
+        synchronize();
+        return nullptr;
+    }
+}
+
+std::shared_ptr<Stmt> Parser::declVar(){
+    Token name = consume(TokenType::IDENTIFIER, "Expected variable name.");
+
+    std::shared_ptr<Expr> initExpr = nullptr;
+    if (match({TokenType::EQUAL})){
+        initExpr = expression();
+    }
+    consume(TokenType::SEMICOLON, "Expected ';' after variable declaration.");
+    return std::shared_ptr<Var>(new Var(name, initExpr));
+}
 
 std::shared_ptr<Stmt> Parser::statement(){
     if (match({TokenType::PRINT})) return printStatement();
