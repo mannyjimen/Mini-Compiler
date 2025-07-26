@@ -6,7 +6,6 @@
 #include "Expression.hpp"
 #include "Statement.hpp"
 #include "Parser.hpp"
-#include "Interpreter.hpp"
 
 #include <fstream>
 #include <iostream>

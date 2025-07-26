@@ -6,6 +6,11 @@ LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
     
 //Interpreter function implementations
 
+Interpreter::Interpreter(){
+    Environment newEnv;
+    environment = newEnv;
+}
+
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     try{
         for (std::shared_ptr<Stmt> stmt : statements)
@@ -50,10 +55,6 @@ void Interpreter::visit(Unary& unary){
 
 void Interpreter::visit(Grouping& grouping){
     m_returns.push(evaluate(grouping.m_contents));
-}
-
-void Interpreter::visit(Variable& variable){
-    
 }
 
 void Interpreter::visit(Binary& binary){
@@ -117,7 +118,11 @@ void Interpreter::visit(Binary& binary){
     }
     std::monostate nullObj;
     m_returns.push(nullObj); return;
-} 
+}
+
+void Interpreter::visit(Variable& variable){
+    m_returns.push(environment.get(variable.m_tokenName));
+}
 
 //Statement Implementation Functions
 void Interpreter::visit(Expression& stmt){
@@ -130,7 +135,11 @@ void Interpreter::visit(Print& stmt){
 }
 
 void Interpreter::visit(Var& stmt){
-
+    std::monostate nullObj;
+    LoxObject val = nullObj;
+    //if initialized
+    if (stmt.m_exprInit) val = evaluate(stmt.m_exprInit);
+    environment.define(stmt.m_token.m_lexeme, val);
 }
 
 //helper funcs

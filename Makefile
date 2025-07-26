@@ -1,5 +1,5 @@
-cpplox: main.o Lox.o Token.o Scanner.o Parser.o Expression.o Interpreter.o Statement.o
-	g++ -std=c++20 main.o Lox.o Token.o Scanner.o Parser.o Expression.o Interpreter.o Statement.o -o cpplox
+cpplox: main.o Lox.o Token.o Scanner.o Parser.o Expression.o Interpreter.o Statement.o Environment.o
+	g++ -std=c++20 main.o Lox.o Token.o Scanner.o Parser.o Expression.o Interpreter.o Statement.o Environment.o -o cpplox -g
 
 main.o: main.cpp
 	g++ -c -std=c++20 main.cpp
@@ -24,6 +24,9 @@ Interpreter.o: Interpreter.cpp
 
 Statement.o: Statement.cpp
 	g++ -c -std=c++20 Statement.cpp
+
+Environment.o: Environment.cpp
+	g++ -c -std=c++20 Environment.cpp -g
 
 clean:
 	rm *.o cpplox

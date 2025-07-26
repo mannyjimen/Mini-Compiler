@@ -3,6 +3,7 @@
 
 #include "Expression.hpp"
 #include "Statement.hpp"
+#include "Environment.hpp"
 #include "Lox.hpp"
 
 #include <variant>
@@ -10,6 +11,8 @@
 #include <memory>
 #include <stack>
 #include <stdexcept>
+
+class Environment;
 
 struct LoxRuntimeError : public std::runtime_error{
     Token m_token;
@@ -20,9 +23,14 @@ struct LoxRuntimeError : public std::runtime_error{
 //POST-ORDER Traversal!
 class Interpreter: public ExprVisitor, public StmtVisitor{
     public:
+
     void interpret(std::vector<std::shared_ptr<Stmt>> statements);
+    Interpreter();
 
     private:
+
+    Environment environment;
+    
     std::stack<LoxObject> m_returns;
     bool isTruthy(const LoxObject& obj);
     bool isEqual(const LoxObject& a, const LoxObject& b);
