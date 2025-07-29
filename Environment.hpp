@@ -10,7 +10,6 @@
 
 class Environment{
     public:
-    Environment();
     void define(const std::string& name, const LoxObject& value);
     LoxObject get(const Token& name);
     private:

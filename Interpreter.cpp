@@ -1,4 +1,5 @@
 #include "Interpreter.hpp"
+#include "Environment.hpp"
 
 LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
     : std::runtime_error(message), m_token(token) {}
@@ -6,10 +7,10 @@ LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
     
 //Interpreter function implementations
 
-Interpreter::Interpreter(){
-    Environment newEnv;
-    environment = newEnv;
-}
+//allocating memory for Environment
+Interpreter::Interpreter(): environment{new Environment}{}
+
+Interpreter::~Interpreter(){ delete environment; environment = nullptr;}
 
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     try{
@@ -121,7 +122,7 @@ void Interpreter::visit(Binary& binary){
 }
 
 void Interpreter::visit(Variable& variable){
-    m_returns.push(environment.get(variable.m_tokenName));
+    m_returns.push(environment->get(variable.m_tokenName));
 }
 
 //Statement Implementation Functions
@@ -139,7 +140,7 @@ void Interpreter::visit(Var& stmt){
     LoxObject val = nullObj;
     //if initialized
     if (stmt.m_exprInit) val = evaluate(stmt.m_exprInit);
-    environment.define(stmt.m_token.m_lexeme, val);
+    environment->define(stmt.m_token.m_lexeme, val);
 }
 
 //helper funcs

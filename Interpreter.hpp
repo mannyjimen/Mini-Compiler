@@ -1,10 +1,9 @@
 #ifndef _INTERPRETER_
 #define _INTERPRETER_
 
+#include "Lox.hpp"
 #include "Expression.hpp"
 #include "Statement.hpp"
-#include "Environment.hpp"
-#include "Lox.hpp"
 
 #include <variant>
 #include <vector>
@@ -26,10 +25,11 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
 
     void interpret(std::vector<std::shared_ptr<Stmt>> statements);
     Interpreter();
+    ~Interpreter();
 
     private:
 
-    Environment environment;
+    Environment* environment;
     
     std::stack<LoxObject> m_returns;
     bool isTruthy(const LoxObject& obj);
