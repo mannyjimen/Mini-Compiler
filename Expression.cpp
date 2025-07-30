@@ -22,6 +22,8 @@ Grouping::Grouping(std::shared_ptr<Expr> contents){
     
 Variable::Variable(const Token& tokenName): m_tokenName{tokenName} {}
 
+Assign::Assign(const Token& tokenName, std::shared_ptr<Expr> value): m_tokenName{tokenName}, m_value{value} {}
+
 //accept implemenatations
 void Binary::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
@@ -36,6 +38,10 @@ void Grouping::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
 void Variable::accept(ExprVisitor& visitor){
+    return visitor.visit(*this);
+}
+
+void Assign::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
 

@@ -6,14 +6,7 @@ Parser::Parser(std::vector<std::shared_ptr<Token>> tokens){
     m_tokens = tokens;
 }
 
-std::vector<std::shared_ptr<Stmt>> Parser::parse(){
-    //old code pre-statement implementation
-    // try{
-    //     return expression();
-    // } catch (ParseError error){
-    //     return nullptr;
-    // }
-    
+std::vector<std::shared_ptr<Stmt>> Parser::parse(){    
     std::vector<std::shared_ptr<Stmt>> statements;
     while (!isAtEnd()){
         statements.push_back(declaration());
@@ -61,7 +54,27 @@ bool Parser::isAtEnd() const{
 
 //Expression parsing implementations
 std::shared_ptr<Expr> Parser::expression(){
-    return equality();
+    return assignment();
+}
+
+std::shared_ptr<Expr> Parser::assignment(){
+    //assignment -> IDENTIFIER '=' assignment | equality
+    std::shared_ptr<Expr> expr = equality();
+
+    if (match({TokenType::EQUAL})){
+        Token equals = previous();
+        std::shared_ptr<Expr> value = assignment();
+        
+        //downcasting Expr -> Variable (needed for variable's token name)
+        if (std::shared_ptr<Variable> tempVariable = std::shared_ptr<Variable>(dynamic_cast<Variable*>(expr.get()))){
+            Token new_tokenName = tempVariable->m_tokenName;
+            std::shared_ptr<Assign> assignReturn(new Assign(new_tokenName, value));
+            return assignReturn;
+        }
+        error(equals, "Invalid assignment target.");
+    }
+    //this is not an assignment
+    return expr;
 }
 
 std::shared_ptr<Expr> Parser::equality(){

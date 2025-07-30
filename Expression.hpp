@@ -20,6 +20,7 @@ class Unary;
 class Grouping;
 class Variable;
 class Expr;
+class Assign;
 
 //Visitor interface / abstract class
 class ExprVisitor{
@@ -29,6 +30,7 @@ public:
     virtual void visit(Unary& unary) = 0;
     virtual void visit(Grouping& grouping) = 0;
     virtual void visit(Variable& variable) = 0;
+    virtual void visit(Assign& assign) = 0;
 };
 
 //visitor for printing AST of expresssion / Concrete
@@ -96,6 +98,16 @@ struct Variable : public Expr{
     Token m_tokenName;
 
     void accept(ExprVisitor& visitor) override;
+};
+
+//assignment expr
+struct Assign : public Expr{
+    Assign(const Token& tokenName, std::shared_ptr<Expr> value);
+
+    Token m_tokenName;
+    std::shared_ptr<Expr> m_value;
+
+    void accept(ExprVisitor& visitor);
 };
 
 #endif
