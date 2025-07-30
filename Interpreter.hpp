@@ -25,11 +25,11 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
 
     void interpret(std::vector<std::shared_ptr<Stmt>> statements);
     Interpreter();
-    ~Interpreter();
+    //FIX: on next commit, just change raw pointer to unique_ptr, and delete destructor/fix constructor
 
     private:
 
-    Environment* environment;
+    std::shared_ptr<Environment> environment;
     
     std::stack<LoxObject> m_returns;
     bool isTruthy(const LoxObject& obj);
@@ -45,11 +45,12 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
     void visit(Unary& unary) override;
     void visit(Binary& binary) override;
     void visit(Variable& variable) override;
+    void visit(Assign& assignExpr) override;
 
     //Statement interpreter implementations
     void visit(Expression& stmt) override;
     void visit(Print& stmt) override;
-    void visit(Var& var) override;
+    void visit(Var& stmt) override;
 
     void checkNumberOperand(const Token& op, const LoxObject& operand);
     void checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right);

@@ -8,9 +8,7 @@ LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
 //Interpreter function implementations
 
 //allocating memory for Environment
-Interpreter::Interpreter(): environment{new Environment}{}
-
-Interpreter::~Interpreter(){ delete environment; environment = nullptr;}
+Interpreter::Interpreter(): environment{std::shared_ptr<Environment>(new Environment)} {}
 
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     try{
@@ -58,6 +56,7 @@ void Interpreter::visit(Grouping& grouping){
     m_returns.push(evaluate(grouping.m_contents));
 }
 
+//FIX maybe clean this up?
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
     LoxObject right = evaluate(binary.m_right);
@@ -123,6 +122,12 @@ void Interpreter::visit(Binary& binary){
 
 void Interpreter::visit(Variable& variable){
     m_returns.push(environment->get(variable.m_tokenName));
+}
+
+void Interpreter::visit(Assign& assignExpr){
+    LoxObject value = evaluate(assignExpr.m_value);
+    environment->assign(assignExpr.m_tokenName, value);
+    m_returns.push(value);
 }
 
 //Statement Implementation Functions

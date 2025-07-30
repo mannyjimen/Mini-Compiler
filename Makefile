@@ -26,7 +26,7 @@ Statement.o: Statement.cpp
 	g++ -c -std=c++20 Statement.cpp
 
 Environment.o: Environment.cpp
-	g++ -c -std=c++20 Environment.cpp -g
+	g++ -c -std=c++20 Environment.cpp
 
 clean:
 	rm *.o cpplox
