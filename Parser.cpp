@@ -65,11 +65,11 @@ std::shared_ptr<Expr> Parser::assignment(){
         Token equals = previous();
         std::shared_ptr<Expr> value = assignment();
         
-        //downcasting Expr -> Variable (needed for variable's token name)
-        if (std::shared_ptr<Variable> tempVariable = std::shared_ptr<Variable>(dynamic_cast<Variable*>(expr.get()))){
+        //downcasting shared_ptr<Expr> to shared_ptr<Variable> without creating extra shared_ptr (dynamic_pointer_cast)
+        if (std::shared_ptr<Variable> tempVariable = std::dynamic_pointer_cast<Variable>(expr)){
             Token new_tokenName = tempVariable->m_tokenName;
             std::shared_ptr<Assign> assignReturn(new Assign(new_tokenName, value));
-            return assignReturn;
+            return std::make_shared<Assign>(tempVariable->m_tokenName, value);
         }
         error(equals, "Invalid assignment target.");
     }
