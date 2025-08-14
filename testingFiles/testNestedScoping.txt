@@ -1,0 +1,20 @@
+var x = 5;
+print "in global scope, x =";
+print x;
+{
+    var x = 6;
+
+    print "after declaring x in first level of scope, x = ";
+    print x;
+    
+    {
+        x = 7;
+        print "after assigning in second level of scope, x = ";
+        print x;
+    }
+    print "exited second level of scope, x = ";
+    print x;
+}
+
+print "back in global scope, x =";
+print x;

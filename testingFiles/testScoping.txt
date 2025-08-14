@@ -1,0 +1,17 @@
+var x = 0;
+{
+    var x = 1;
+    print "in local scope, x = ";
+    print x;
+}
+
+print "in global scope, x =";
+print x;
+
+{
+    x = 1;
+    print "now, reassigned in local scope";
+}
+
+print "in global scope, x now equals";
+print x;

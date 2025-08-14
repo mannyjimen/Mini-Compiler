@@ -1,0 +1,8 @@
+var x = 5;
+print "after declaration, x is equal to";
+print x;
+
+x = 10;
+
+print "after reassigning, x is now equal to";
+print x;
