@@ -28,7 +28,6 @@ void Environment::assign(const Token& token, const LoxObject& value){
 
 LoxObject Environment::get(const Token& name){
     if (values.count(name.m_lexeme)) return values.at(name.m_lexeme);
-
     if (m_enclosing != nullptr) return m_enclosing->get(name);
 
     throw LoxRuntimeError(name, "Undefined variable '" + name.m_lexeme + "'.");

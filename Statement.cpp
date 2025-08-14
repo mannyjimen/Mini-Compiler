@@ -21,3 +21,11 @@ Var::Var(const Token& token, std::shared_ptr<Expr> expr): m_token{token} {
 void Var::accept(StmtVisitor& visitor){
     visitor.visit(*this);
 }
+
+Block::Block(const std::vector<std::shared_ptr<Stmt>>& statements) {
+    m_statements = statements;
+}
+
+void Block::accept(StmtVisitor& visitor) {
+    visitor.visit(*this);
+}

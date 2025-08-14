@@ -6,10 +6,12 @@
 #include "Expression.hpp"
 #include "Token.hpp"
 
-//might not need forward declarations. double check
-class Expression;
-class Print;
-class Var;
+//need forward declarations
+struct Expression;
+struct Print;
+struct Var;
+struct Block;
+
 
 //statement visitor interface
 class StmtVisitor{
@@ -17,6 +19,7 @@ class StmtVisitor{
     virtual void visit(Print& stmt) = 0;
     virtual void visit(Expression& stmt) = 0;
     virtual void visit(Var& stmt) = 0;
+    virtual void visit(Block& stmt) = 0;
 };
 
 //statement interface
@@ -35,6 +38,7 @@ struct Expression : public Stmt {
 
 };
 
+//print statement
 struct Print : public Stmt {
     Print(std::shared_ptr<Expr> expr);
 
@@ -49,6 +53,15 @@ struct Var : public Stmt {
 
     Token m_token;
     std::shared_ptr<Expr> m_exprInit;
+
+    void accept(StmtVisitor& visitor) override;
+};
+
+//block statement
+struct Block : public Stmt {
+    Block(const std::vector<std::shared_ptr<Stmt>>& statements);
+
+    std::vector<std::shared_ptr<Stmt>> m_statements;
 
     void accept(StmtVisitor& visitor) override;
 };

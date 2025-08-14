@@ -50,6 +50,7 @@ private:
     std::shared_ptr<Stmt> statement();
     std::shared_ptr<Stmt> expressionStatement();
     std::shared_ptr<Stmt> printStatement();
+    std::vector<std::shared_ptr<Stmt>> block();
     
     //error functions
     static ParseError error(const Token& token, const std::string& message);

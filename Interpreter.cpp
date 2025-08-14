@@ -8,7 +8,7 @@ LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
 //Interpreter function implementations
 
 //allocating memory for Environment
-Interpreter::Interpreter(): environment{std::shared_ptr<Environment>(new Environment)} {}
+Interpreter::Interpreter(): m_environment{std::shared_ptr<Environment>(new Environment)} {}
 
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     try{
@@ -121,12 +121,12 @@ void Interpreter::visit(Binary& binary){
 }
 
 void Interpreter::visit(Variable& variable){
-    m_returns.push(environment->get(variable.m_tokenName));
+    m_returns.push(m_environment->get(variable.m_tokenName));
 }
 
 void Interpreter::visit(Assign& assignExpr){
     LoxObject value = evaluate(assignExpr.m_value);
-    environment->assign(assignExpr.m_tokenName, value);
+    m_environment->assign(assignExpr.m_tokenName, value);
     m_returns.push(value);
 }
 
@@ -145,7 +145,24 @@ void Interpreter::visit(Var& stmt){
     LoxObject val = nullObj;
     //if initialized
     if (stmt.m_exprInit) val = evaluate(stmt.m_exprInit);
-    environment->define(stmt.m_token.m_lexeme, val);
+    m_environment->define(stmt.m_token.m_lexeme, val);
+}
+
+void Interpreter::visit(Block& stmt) {
+    Environment newEnvironment(m_environment);
+    std::shared_ptr<Environment> newEnvironmentSP = std::make_shared<Environment>(newEnvironment);
+    executeBlock(stmt.m_statements, newEnvironmentSP);
+}
+
+void Interpreter::executeBlock(std::vector<std::shared_ptr<Stmt>> statements, std::shared_ptr<Environment> environment) {
+    
+    //see StateGuard in .h file. RAII for mutating and restoring m_environment.
+    StateGuard envStateGuard(m_environment, environment);
+
+    for (std::shared_ptr<Stmt> statement: statements) {
+        execute(statement);
+    }
+    
 }
 
 //helper funcs

@@ -187,6 +187,9 @@ std::shared_ptr<Stmt> Parser::declVar(){
 
 std::shared_ptr<Stmt> Parser::statement(){
     if (match({TokenType::PRINT})) return printStatement();
+    if (match({TokenType::LEFT_BRACE})){
+        return std::make_shared<Block>(Block(block()));
+    }
     return expressionStatement();
 }
 
@@ -201,6 +204,17 @@ std::shared_ptr<Stmt> Parser::printStatement(){
     std::shared_ptr<Expr> value = expression();
     consume(TokenType::SEMICOLON, "Expected a ';' after value");
     return std::make_shared<Print>(value);
+}
+
+std::vector<std::shared_ptr<Stmt>> Parser::block(){
+    std::vector<std::shared_ptr<Stmt>> allBlockStatements;
+
+    while (!check(TokenType::RIGHT_BRACE) && !isAtEnd()) {
+        allBlockStatements.push_back(declaration());
+    }
+
+    consume(TokenType::RIGHT_BRACE, "Expected a '}' after block.");
+    return allBlockStatements;
 }
 
 

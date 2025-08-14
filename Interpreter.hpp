@@ -13,6 +13,20 @@
 
 class Environment;
 
+//instead of try finally block in java, i can use C++ RAII to do the mutation of m_environment, and restore at destruction time
+class StateGuard {
+    public:
+    StateGuard(std::shared_ptr<Environment>& managing, std::shared_ptr<Environment> newEnvironment): m_managing(managing), m_old(managing) {
+        m_managing = newEnvironment;
+    }
+    ~StateGuard() {
+        m_managing = m_old;
+    }    
+    private:
+    std::shared_ptr<Environment>& m_managing;
+    std::shared_ptr<Environment> m_old;
+};
+
 struct LoxRuntimeError : public std::runtime_error{
     Token m_token;
 
@@ -29,7 +43,7 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
 
     private:
 
-    std::shared_ptr<Environment> environment;
+    std::shared_ptr<Environment> m_environment;
     
     std::stack<LoxObject> m_returns;
     bool isTruthy(const LoxObject& obj);
@@ -51,6 +65,8 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
     void visit(Expression& stmt) override;
     void visit(Print& stmt) override;
     void visit(Var& stmt) override;
+    void visit(Block& stmt) override;
+    void executeBlock(std::vector<std::shared_ptr<Stmt>> statements, std::shared_ptr<Environment> environment);
 
     void checkNumberOperand(const Token& op, const LoxObject& operand);
     void checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right);

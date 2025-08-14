@@ -13,7 +13,8 @@ class Environment{
     //global scope environment constructor
     Environment();
     //local scope environment constructor, enclosing is the immediate surrounding scope's environment.
-    Environment::Environment(std::shared_ptr<Environment> enclosing);
+    // Environment(std::shared_ptr<Environment> enclosing);
+    Environment(std::shared_ptr<Environment> enclosing);
 
     std::shared_ptr<Environment> m_enclosing;
 
