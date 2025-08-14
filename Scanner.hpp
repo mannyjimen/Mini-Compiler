@@ -9,14 +9,18 @@
 #include <memory>
 
 class Scanner{
+public:
+    Scanner(const std::string& source);
+    //main method
+    std::vector<std::shared_ptr<Token>> scanTokens();
 
+private:
     std::string m_source;
     std::vector<std::shared_ptr<Token>> m_tokens;
     int m_start = 0;
     int m_current = 0;
     int m_line = 1;
 
-public:
     //hashmap for keywords (reserved words)
     const std::unordered_map<std::string, TokenType> keywords =
     {
@@ -37,11 +41,7 @@ public:
         {"var", TokenType::VAR},
         {"while", TokenType::WHILE}
     };
-
-    //scanner constructor
-    Scanner(const std::string& source);
-    //scanning entire source
-    std::vector<std::shared_ptr<Token>> scanTokens();
+    
     //scanning individual lexemes
     void scanToken();
     
@@ -74,7 +74,7 @@ public:
 
     //prints every token in m_tokens (helper function)
     void printTokens() const;
-     
+
 };
 
 #endif

@@ -19,8 +19,6 @@ void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     }
 }
 
-//FIX
-//this is where I need to return (use stack) a value
 LoxObject Interpreter::evaluate(std::shared_ptr<Expr> expr){
     expr->accept(*this);
     LoxObject ret = m_returns.top();
@@ -56,7 +54,7 @@ void Interpreter::visit(Grouping& grouping){
     m_returns.push(evaluate(grouping.m_contents));
 }
 
-//FIX maybe clean this up?
+//FIX - clean this up it looks horrendous
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
     LoxObject right = evaluate(binary.m_right);
@@ -79,8 +77,6 @@ void Interpreter::visit(Binary& binary){
         s_left = std::get<std::string>(left); s_right = std::get<std::string>(right);
     }
 
-    //FIX
-    //if adding strings, error will occur if operator other than + is used
     switch (binary.m_op.m_type){
         case TokenType::MINUS:
             checkNumberOperands(binary.m_op, left, right);
@@ -184,8 +180,7 @@ std::string Interpreter::stringify(const LoxObject& obj){
         if (sdouble[r] == '.') r--;
         sdouble = sdouble.substr(0, r + 1);
         return sdouble;
-        //FIX-DONE
-        //remove trailing zeros from double.
+        //FIX-DONE - remove trailing zeros from double.
     }
     return std::get<std::string>(obj);
 }

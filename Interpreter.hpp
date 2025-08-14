@@ -39,7 +39,6 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
 
     void interpret(std::vector<std::shared_ptr<Stmt>> statements);
     Interpreter();
-    //FIX: on next commit, just change raw pointer to unique_ptr, and delete destructor/fix constructor
 
     private:
 

@@ -1,9 +1,6 @@
 #ifndef _EXPR_
 #define _EXPR_
 
-//FIX-MAYBE:
-//Stubbing all member Tokens since error because Token doesn't
-//have default constructor.
 #include "Token.hpp"
 
 #include <string>

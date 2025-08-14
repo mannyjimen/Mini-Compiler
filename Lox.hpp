@@ -21,16 +21,16 @@ class LoxRuntimeError;
 class Lox{
 
     public:
-    //interpreter declaration
-    static Interpreter interpreter;
-    //constructor
     Lox(int argc, char* argv[]);
-
-    //static error function
+    
+    //static error functions
     static void error(int line, const std::string& message);
     static void error(Token token, const std::string& message);
     static void runtimeError(LoxRuntimeError error);
 
+    private:
+    //interpreter declaration
+    static Interpreter interpreter;
 
     private:
     //run from prompt
