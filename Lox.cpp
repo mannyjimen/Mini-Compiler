@@ -4,6 +4,10 @@
 //interpreter definition (NEEDED)
 Interpreter Lox::interpreter;
 
+//defining and initializng m_repl flag
+bool Lox::m_repl = false;
+
+
 Lox::Lox(int argc, char* argv[]){
     //learn about exceptions throw catch
     if (argc > 2){
@@ -11,9 +15,11 @@ Lox::Lox(int argc, char* argv[]){
         return;
     }
     if (argc == 1){
+        m_repl = true;
         runPrompt();
     }
     else {
+        m_repl = false;
         runFile(argv[1]);
     }
 }
@@ -91,4 +97,8 @@ void Lox::runtimeError(LoxRuntimeError error){
 void Lox::report(int lineNum, const std::string& where, const std::string& message){
     std::cerr << "[line " << lineNum << "]" << " Error" << where << ": " << message << std::endl;
     hadError = true;
+}
+
+bool Lox::isREPL(){
+    return m_repl;
 }

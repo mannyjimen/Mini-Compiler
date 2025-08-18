@@ -128,7 +128,8 @@ void Interpreter::visit(Assign& assignExpr){
 
 //Statement Implementation Functions
 void Interpreter::visit(Expression& stmt){
-    evaluate(stmt.m_expr);
+    LoxObject value = evaluate(stmt.m_expr);
+    if (Lox::isREPL() == true) std::cout << stringify(value) << std::endl;
 }
 
 void Interpreter::visit(Print& stmt){

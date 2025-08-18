@@ -21,7 +21,8 @@ class StateGuard {
     }
     ~StateGuard() {
         m_managing = m_old;
-    }    
+    }
+
     private:
     std::shared_ptr<Environment>& m_managing;
     std::shared_ptr<Environment> m_old;
@@ -37,8 +38,8 @@ struct LoxRuntimeError : public std::runtime_error{
 class Interpreter: public ExprVisitor, public StmtVisitor{
     public:
 
-    void interpret(std::vector<std::shared_ptr<Stmt>> statements);
     Interpreter();
+    void interpret(std::vector<std::shared_ptr<Stmt>> statements);
 
     private:
 

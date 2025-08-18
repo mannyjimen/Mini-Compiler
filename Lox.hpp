@@ -22,17 +22,24 @@ class Lox{
 
     public:
     Lox(int argc, char* argv[]);
-    
+
+    static Lox& get();
+
     //static error functions
     static void error(int line, const std::string& message);
     static void error(Token token, const std::string& message);
     static void runtimeError(LoxRuntimeError error);
-
+    static bool isREPL();
+    
     private:
     //interpreter declaration
     static Interpreter interpreter;
 
     private:
+
+    Lox();
+    static bool m_repl;
+
     //run from prompt
     static void runPrompt();
     //run from file
@@ -42,6 +49,8 @@ class Lox{
 
     //error helper
     static void report(int line, const std::string& where, const std::string& message);
+
+
 };
 
 #endif
