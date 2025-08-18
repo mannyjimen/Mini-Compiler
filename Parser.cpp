@@ -186,6 +186,7 @@ std::shared_ptr<Stmt> Parser::declVar(){
 }
 
 std::shared_ptr<Stmt> Parser::statement(){
+    if (match({TokenType::IF})) return ifStatement();
     if (match({TokenType::PRINT})) return printStatement();
     if (match({TokenType::LEFT_BRACE})){
         return std::make_shared<Block>(Block(block()));
@@ -217,6 +218,22 @@ std::vector<std::shared_ptr<Stmt>> Parser::block(){
     return allBlockStatements;
 }
 
+std::shared_ptr<Stmt> Parser::ifStatement() {
+    consume(TokenType::LEFT_PAREN, "Expected a '(' after 'if'.");
+
+    std::shared_ptr<Expr> conditional = expression();
+
+    consume(TokenType::RIGHT_PAREN, "Expected a ')' after conditional.");
+    
+    std::shared_ptr<Stmt> thenBranch = statement();
+    std::shared_ptr<Stmt> elseBranch = nullptr;
+
+    if (match({TokenType::ELSE})) {
+        elseBranch = statement();
+    }
+
+    return std::make_shared<IfStmt>(conditional, thenBranch, elseBranch);
+}
 
 //Error function implementations
 

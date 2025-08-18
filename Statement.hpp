@@ -11,6 +11,7 @@ struct Expression;
 struct Print;
 struct Var;
 struct Block;
+struct IfStmt;
 
 
 //statement visitor interface
@@ -20,6 +21,7 @@ class StmtVisitor{
     virtual void visit(Expression& stmt) = 0;
     virtual void visit(Var& stmt) = 0;
     virtual void visit(Block& stmt) = 0;
+    virtual void visit(IfStmt& stmt) = 0;
 };
 
 //statement interface
@@ -62,6 +64,18 @@ struct Block : public Stmt {
     Block(const std::vector<std::shared_ptr<Stmt>>& statements);
 
     std::vector<std::shared_ptr<Stmt>> m_statements;
+
+    void accept(StmtVisitor& visitor) override;
+};
+
+struct IfStmt : public Stmt {
+    IfStmt(const std::shared_ptr<Expr>& conditional,
+         const std::shared_ptr<Stmt>& thenBranch,
+         const std::shared_ptr<Stmt>& elseBranch);
+
+    std::shared_ptr<Expr> m_conditional;
+    std::shared_ptr<Stmt> m_thenBranch;
+    std::shared_ptr<Stmt> m_elseBranch;
 
     void accept(StmtVisitor& visitor) override;
 };

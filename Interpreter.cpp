@@ -162,6 +162,17 @@ void Interpreter::executeBlock(std::vector<std::shared_ptr<Stmt>> statements, st
     
 }
 
+void Interpreter::visit(IfStmt& stmt) {
+    bool isConditionalTruthy = isTruthy(evaluate(stmt.m_conditional));
+
+    if (isConditionalTruthy) {
+        execute(stmt.m_thenBranch);
+    } else if (stmt.m_elseBranch != nullptr) {
+        execute (stmt.m_elseBranch);
+    }
+    
+}
+
 //helper funcs
 
 std::string Interpreter::stringify(const LoxObject& obj){

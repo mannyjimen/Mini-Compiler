@@ -1,0 +1,21 @@
+var isAppleRed = true;
+
+var isOrangeBlue = true;
+var isBananaYellow = true;
+
+if (isAppleRed == true) {
+    print "Apple is red!";
+}
+else {
+    isAppleRed = true;
+}
+
+if (isOrangeBlue == true)
+if (isBananaYellow == false) print "banana is not yellow";
+else print "orange is blue, and banana is yellow!";
+
+/*
+
+last else condition should be connected to the most recent if statement
+
+*/

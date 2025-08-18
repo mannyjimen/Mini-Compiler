@@ -15,3 +15,11 @@ print x;
 
 print "in global scope, x now equals";
 print x;
+
+print  "---------------";
+
+var  a = 1;
+{
+    var a = a + 2;
+    print a;
+}

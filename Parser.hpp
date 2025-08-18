@@ -51,6 +51,7 @@ private:
     std::shared_ptr<Stmt> expressionStatement();
     std::shared_ptr<Stmt> printStatement();
     std::vector<std::shared_ptr<Stmt>> block();
+    std::shared_ptr<Stmt> ifStatement();
     
     //error functions
     static ParseError error(const Token& token, const std::string& message);
