@@ -6,16 +6,20 @@ var isBananaYellow = true;
 if (isAppleRed == true) {
     print "Apple is red!";
 }
-else {
-    isAppleRed = true;
-}
 
 if (isOrangeBlue == true)
 if (isBananaYellow == false) print "banana is not yellow";
 else print "orange is blue, and banana is yellow!";
 
+var match = "hello" == "hello";
+if (match) print "hello";
+
 /*
 
-last else condition should be connected to the most recent if statement
+should print:
+
+Apple is red!
+orange is blue, banana is yellow!
+"hello"
 
 */

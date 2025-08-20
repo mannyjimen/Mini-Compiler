@@ -60,6 +60,7 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
     void visit(Binary& binary) override;
     void visit(Variable& variable) override;
     void visit(Assign& assignExpr) override;
+    void visit(Logical& logical) override;
 
     //Statement interpreter implementations
     void visit(Expression& stmt) override;

@@ -1,0 +1,31 @@
+var a = 5;
+var b = false;
+
+print a or b;
+print a and b;
+
+/*
+should print:
+
+5
+false
+
+*/
+
+var c = false;
+var d = false;
+var e = 1;
+
+print c or d or e;
+print c or d and e;
+
+/*
+should print:
+
+1
+false
+
+*/
+
+print "hello" and false;
+print false or false or false or false or false or "LOX" or false;

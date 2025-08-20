@@ -1,28 +1,20 @@
 #include "Expression.hpp"
 
 //constructors
-Binary::Binary(std::shared_ptr<Expr> left, const Token& op, std::shared_ptr<Expr> right){
-        m_left = left;
-        m_op = op;
-        m_right = right;
-}
+Binary::Binary(std::shared_ptr<Expr> left, const Token& op, std::shared_ptr<Expr> right): m_left(left), m_op(op), m_right(right) {}
 
-Literal::Literal(const LoxObject& lit){
-    m_lit = lit;
-}
+Literal::Literal(const LoxObject& lit): m_lit(lit) {}
 
-Unary::Unary(const Token& logicalop, std::shared_ptr<Expr> operand){
-        m_logicalop = logicalop;
-        m_operand = operand;
-    }
+Unary::Unary(const Token& logicalop, std::shared_ptr<Expr> operand): m_logicalop(logicalop), m_operand(operand) {}
 
-Grouping::Grouping(std::shared_ptr<Expr> contents){
-        m_contents = contents;
-    }
+Grouping::Grouping(std::shared_ptr<Expr> contents): m_contents(contents) {}
     
 Variable::Variable(const Token& tokenName): m_tokenName{tokenName} {}
 
 Assign::Assign(const Token& tokenName, std::shared_ptr<Expr> value): m_tokenName{tokenName}, m_value{value} {}
+
+Logical::Logical(std::shared_ptr<Expr> left_operand, const Token& logica_op, std::shared_ptr<Expr> right_operand)
+: m_left_operand(left_operand), m_logical_op(logica_op), m_right_operand(right_operand) {}
 
 //accept implemenatations
 void Binary::accept(ExprVisitor& visitor){
@@ -42,6 +34,10 @@ void Variable::accept(ExprVisitor& visitor){
 }
 
 void Assign::accept(ExprVisitor& visitor){
+    return visitor.visit(*this);
+}
+
+void Logical::accept(ExprVisitor& visitor){
     return visitor.visit(*this);
 }
 

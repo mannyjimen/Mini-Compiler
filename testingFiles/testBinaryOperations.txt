@@ -1,0 +1,8 @@
+var a = 5;
+var b = 4;
+print a + b;
+
+var john = "John";
+var cat = 10;
+
+if (john > cat) print "John is greater than cat";

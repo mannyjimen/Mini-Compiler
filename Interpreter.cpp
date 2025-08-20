@@ -54,19 +54,36 @@ void Interpreter::visit(Grouping& grouping){
     m_returns.push(evaluate(grouping.m_contents));
 }
 
+enum TypeCheck{
+    DOUBLE,
+    STRING,
+    BOOL,
+    NULLOBJ
+};
+
+TypeCheck checkTypeFor(const LoxObject& obj) {
+    if (std::get_if<bool>(&obj)) return TypeCheck::BOOL;
+    if (std::get_if<double>(&obj)) return TypeCheck::DOUBLE;
+    if (std::get_if<std::string>(&obj)) return TypeCheck::STRING;
+    return TypeCheck::NULLOBJ;
+}
+
 //FIX - clean this up it looks horrendous
 void Interpreter::visit(Binary& binary){
     LoxObject left = evaluate(binary.m_left);
     LoxObject right = evaluate(binary.m_right);
-    bool areBools = false;
-    bool areDoubles = false;
-    bool areStrings = false;
+
+    TypeCheck left_operand_type = checkTypeFor(left);
+    TypeCheck right_operand_type = checkTypeFor(right);
+    
+    bool areBools = left_operand_type == TypeCheck::BOOL && right_operand_type == TypeCheck::BOOL;
+    bool areDoubles = left_operand_type == TypeCheck::DOUBLE && right_operand_type == TypeCheck::DOUBLE;
+    bool areStrings = left_operand_type == TypeCheck::STRING && right_operand_type == TypeCheck::STRING;
+    
     bool b_left, b_right;
     double d_left, d_right;
     std::string s_left, s_right;
-    if (std::get_if<bool>(&left) && std::get_if<bool>(&right)) areBools = true;
-    if (std::get_if<double>(&left) && std::get_if<double>(&right)) areDoubles = true;
-    if (std::get_if<std::string>(&left) && std::get_if<std::string>(&right)) areStrings = true;
+
     if(areBools){
         b_left = std::get<bool>(left); b_right = std::get<bool>(right);
     }
@@ -124,6 +141,27 @@ void Interpreter::visit(Assign& assignExpr){
     LoxObject value = evaluate(assignExpr.m_value);
     m_environment->assign(assignExpr.m_tokenName, value);
     m_returns.push(value);
+}
+//note, instead of pushing boolean to returns, we are pushing the object that caused the expression to either be truthy or falsey
+void Interpreter::visit(Logical& logical) {
+    //evaluating left first
+    LoxObject left_value = evaluate(logical.m_left_operand);
+    Token logical_op = logical.m_logical_op;
+    bool left_truthy = isTruthy(left_value);
+
+    if (logical_op.m_type == TokenType::OR) {
+        if (left_truthy) {
+            m_returns.push(left_value); return;
+        }
+    } else {
+        if (!left_truthy) {
+            m_returns.push(left_value); return;
+        }
+    }
+
+    //if we get here, short circuiting not applicable
+    LoxObject right_value = evaluate(logical.m_right_operand);
+    m_returns.push(right_value);
 }
 
 //Statement Implementation Functions

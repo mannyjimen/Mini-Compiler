@@ -18,6 +18,7 @@ class Grouping;
 class Variable;
 class Expr;
 class Assign;
+class Logical;
 
 //Visitor interface / abstract class
 class ExprVisitor{
@@ -28,6 +29,7 @@ public:
     virtual void visit(Grouping& grouping) = 0;
     virtual void visit(Variable& variable) = 0;
     virtual void visit(Assign& assign) = 0;
+    virtual void visit(Logical& logical) = 0;
 };
 
 //visitor for printing AST of expresssion / Concrete
@@ -103,6 +105,17 @@ struct Assign : public Expr{
 
     Token m_tokenName;
     std::shared_ptr<Expr> m_value;
+
+    void accept(ExprVisitor& visitor);
+};
+
+//logical and / or expr
+struct Logical : public Expr {
+    Logical(std::shared_ptr<Expr> left_operand, const Token& logical_op, std::shared_ptr<Expr> right_operand);
+
+    std::shared_ptr<Expr> m_left_operand;
+    Token m_logical_op;
+    std::shared_ptr<Expr> m_right_operand;
 
     void accept(ExprVisitor& visitor);
 };
