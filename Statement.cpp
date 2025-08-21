@@ -29,3 +29,9 @@ IfStmt::IfStmt(const std::shared_ptr<Expr>& conditional,
 void IfStmt::accept(StmtVisitor& visitor) {
     visitor.visit(*this);
 }
+
+While::While(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> body): m_condition(condition), m_body(body) {}
+
+void While::accept(StmtVisitor& visitor) {
+    visitor.visit(*this);
+}

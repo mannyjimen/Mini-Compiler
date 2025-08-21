@@ -69,6 +69,8 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
     void visit(Block& stmt) override;
     void executeBlock(std::vector<std::shared_ptr<Stmt>> statements, std::shared_ptr<Environment> environment);
     void visit(IfStmt& stmt) override;
+    void visit(While& stmt) override;
+
 
     void checkNumberOperand(const Token& op, const LoxObject& operand);
     void checkNumberOperands(const Token& op, const LoxObject& left, const LoxObject& right);

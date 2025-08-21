@@ -10,10 +10,12 @@ LoxRuntimeError::LoxRuntimeError(const Token& token, const std::string& message)
 //allocating memory for Environment
 Interpreter::Interpreter(): m_environment{std::shared_ptr<Environment>(new Environment)} {}
 
+
+//FIX - maybe add if stmt = nullptr, dont exec
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> statements){
     try{
         for (std::shared_ptr<Stmt> stmt : statements)
-            execute(stmt);
+            execute(stmt); 
     } catch (LoxRuntimeError error){
         Lox::runtimeError(error);
     }
@@ -209,6 +211,14 @@ void Interpreter::visit(IfStmt& stmt) {
         execute (stmt.m_elseBranch);
     }
     
+}
+
+void Interpreter::visit(While& stmt) {
+//very easy implementation.
+    while (isTruthy(evaluate(stmt.m_condition))) {
+        execute(stmt.m_body);
+    }
+
 }
 
 //helper funcs

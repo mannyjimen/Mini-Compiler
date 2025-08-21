@@ -12,6 +12,7 @@ struct Print;
 struct Var;
 struct Block;
 struct IfStmt;
+struct While;
 
 
 //statement visitor interface
@@ -22,6 +23,7 @@ class StmtVisitor{
     virtual void visit(Var& stmt) = 0;
     virtual void visit(Block& stmt) = 0;
     virtual void visit(IfStmt& stmt) = 0;
+    virtual void visit(While& stmt) = 0;
 };
 
 //statement interface
@@ -76,6 +78,15 @@ struct IfStmt : public Stmt {
     std::shared_ptr<Expr> m_conditional;
     std::shared_ptr<Stmt> m_thenBranch;
     std::shared_ptr<Stmt> m_elseBranch;
+
+    void accept(StmtVisitor& visitor) override;
+};
+
+struct While : public Stmt {
+    While(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> body);
+
+    std::shared_ptr<Expr> m_condition;
+    std::shared_ptr<Stmt> m_body;
 
     void accept(StmtVisitor& visitor) override;
 };
