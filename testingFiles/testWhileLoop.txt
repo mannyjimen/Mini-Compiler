@@ -1,0 +1,7 @@
+var a = 5;
+while (a < 100) {
+    print "a is equal to ";
+    print a;
+    a = a + 1;
+}
+print "All done!";
