@@ -113,6 +113,18 @@ void Interpreter::visit(Binary& binary){
             if (areDoubles){
                 m_returns.push(d_left + d_right); return;
             }
+            if ((left_operand_type == TypeCheck::STRING || right_operand_type == TypeCheck::STRING) && !areBools) {
+                if (left_operand_type != TypeCheck::STRING) {
+                    s_left = toStringNoTrailingZeroes(std::get<double>(left));
+                    s_right = std::get<std::string>(right);
+                }
+                else  {
+                    s_left = std::get<std::string>(left);
+                    s_right = toStringNoTrailingZeroes(std::get<double>(right));
+                }
+
+                m_returns.push(s_left + s_right); return;
+            }
             throw LoxRuntimeError(binary.m_op, "Operands must be both numbers or both strings.");
         case TokenType::GREATER:
             checkNumberOperands(binary.m_op, left, right);
@@ -223,6 +235,15 @@ void Interpreter::visit(While& stmt) {
 
 //helper funcs
 
+std::string Interpreter::toStringNoTrailingZeroes(double obj) {
+    std::string sdouble = std::to_string(obj);
+    int r = sdouble.size() - 1;
+    while (sdouble[r] == '0') r--;
+    if (sdouble[r] == '.') r--;
+    sdouble = sdouble.substr(0, r + 1);
+    return sdouble;
+}
+
 std::string Interpreter::stringify(const LoxObject& obj){
     if (std::get_if<std::monostate>(&obj)) return "nil";
     else if (std::get_if<bool>(&obj)){
@@ -234,11 +255,8 @@ std::string Interpreter::stringify(const LoxObject& obj){
         }
     }
     else if (std::get_if<double>(&obj)){
-        std::string sdouble = std::to_string(std::get<double>(obj));
-        int r = sdouble.size() - 1;
-        while (sdouble[r] == '0') r--;
-        if (sdouble[r] == '.') r--;
-        sdouble = sdouble.substr(0, r + 1);
+        double dobj = std::get<double>(obj);
+        std::string sdouble = toStringNoTrailingZeroes(dobj);
         return sdouble;
         //FIX-DONE - remove trailing zeros from double.
     }

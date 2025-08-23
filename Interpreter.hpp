@@ -49,6 +49,7 @@ class Interpreter: public ExprVisitor, public StmtVisitor{
     bool isTruthy(const LoxObject& obj);
     bool isEqual(const LoxObject& a, const LoxObject& b);
     std::string stringify(const LoxObject& obj);
+    std::string toStringNoTrailingZeroes(double obj);
 
     LoxObject evaluate(std::shared_ptr<Expr> expr);
     void execute(std::shared_ptr<Stmt> stmt);

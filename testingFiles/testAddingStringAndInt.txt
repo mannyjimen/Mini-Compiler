@@ -1,0 +1,8 @@
+var a = 5;
+print "johnny has " + a + " apples";
+
+
+var b = 22;
+var myName = "Manny";
+
+print b + "... I am that old as of yesterday... yes me! My name is " + myName + "!";

@@ -330,57 +330,6 @@ std::shared_ptr<Stmt> Parser::forStatement() {
 
     std::shared_ptr<Stmt> body = statement();
 
-    //desugaring time
-    //for loop is a while loop
-    /*
-        for (var x = 0; x < 10; x = x + 1) {
-            //contents
-        }
-    
-    is equal to
-    {
-        var x = 0;
-        while (x < 10) {
-            //contents
-            x = x + 1;
-        }
-    }
-        initializer goes on outside of block
-        while loop gets condition
-        statement for while loop is contents with increment
-
-    */
-
-    // std::shared_ptr<Expression> incrementExpr = nullptr;
-    // if (increment != nullptr) {
-    //     incrementExpr = std::make_shared<Expression>(increment);
-    // }
-
-    // //creating contents of while loop
-    // std::vector<std::shared_ptr<Stmt>> whileContents;
-    // if (increment == nullptr) {
-    //     whileContents = {body};
-    // } else {
-    //     whileContents = {body, incrementExpr};
-    // }
-
-    // std::shared_ptr<Block> whileLoopStatement = std::make_shared<Block>(whileContents);
-
-    // //creating while loop
-    // if (condition == nullptr) { //no condition? infinite loop
-    //     condition = std::make_shared<Literal>(true); //true for condition
-    // }
-    // std::shared_ptr<While> forLoopToWhileLoop = std::make_shared<While>(condition, whileLoopStatement);
-
-    // //creating block that contains for loop to while loop, starting with initializer statement
-    // std::vector<std::shared_ptr<Stmt>> allContents;
-    // if (initializer == nullptr) {
-    //     allContents = {forLoopToWhileLoop};
-    // } else {
-    //     allContents = {initializer, forLoopToWhileLoop};
-    // }
-    // std::shared_ptr<Block> forLoopBlock = std::make_shared<Block>(allContents);
-
     return desugarForLoop(initializer, condition, increment, body);
 }
 
